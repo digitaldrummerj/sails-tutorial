@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Sails Tutorial</title>
+
+
+	<meta charset="utf-8">
+	<meta name="description" content="Sails Workshop">
+	<meta name="author" content="Justin James">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<div id="tutorial-container">
+		<div id="header">
+			<a href="#" class="menu header-btn" id="toggle-toc"></a>
+			<h1>Sails Tutorial</h1>
+			<a href="https://github.com/digitaldrummerj/sails-tutorial" class="github header-btn"></a>
+		</div>
+		<div id="tutorial-content-container">
+
+			<div id="toc">
+				<div class="toc-heading">Table of Contents</div>
+				<div id="toc-padding"></div>
+			</div>
+			<div id="book">
+				<div class="chapter">
+					@@include(markdown("chapters/chapter00-intro.md"))
+				</div>
+				<hr>
+				<div class="chapter">
+					@@include(markdown("chapters/chapter01-software-installs.md"))
+				</div>
+				<hr>
+				<div class="chapter">
+					@@include(markdown("chapters/chapter02-create-project.md"))
+				</div>
+				<hr>
+				<div class="chapter">
+					@@include(markdown("chapters/chapter03-project-layout.md"))
+				</div>
+				<hr>
+				<div class="chapter">
+					@@include(markdown("chapters/chapter04-create-api.md"))
+				</div>
+				<hr>
+				<div class="chapter">
+					@@include(markdown("chapters/chapter05-override-verbs.md"))
+				</div>
+				<hr>
+				<div class="chapter">
+					@@include(markdown("chapters/chapter06-custom-functions.md"))
+				</div>
+				<hr>
+				<div class="chapter">
+					@@include(markdown("chapters/chapter07-locking-down.md"))
+				</div>
+				<hr>
+				<div class="chapter">
+					@@include(markdown("chapters/chapter08-connecting-mongodb.md"))
+				</div>
+				<hr>
+				<div class="chapter">
+					@@include(markdown("chapters/chapter97-deploying.md"))
+				</div>
+				<hr>
+				<div class="chapter">
+					@@include(markdown("chapters/chapter98-testing.md"))
+				</div>
+				<hr>
+				<div class="chapter">
+					@@include(markdown("chapters/chapter99-linting.md"))
+				</div>
+				<hr>
+				<div class="chapter">
+					@@include(markdown("chapters/chapter100.md"))
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="scripts/built.js"></script>
+
+</body>
+
+</html>

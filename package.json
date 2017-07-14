@@ -1,0 +1,23 @@
+{
+  "name": "angular2-tutorial",
+  "version": "1.0.0",
+  "description": "Angular 2 Tutorial",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/digitaldrummerj/angular2-tutorial"
+  },
+  "author": "Justin James",
+  "bugs": {
+    "url": "https://github.com/digitaldrummerj/angular2-tutorial/issues"
+  },
+  "homepage": "http://digitaldrummerj.me/angular2-tutorial/",
+  "devDependencies": {
+    "gulp": "~3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-file-include": "^1.1.0",
+    "gulp-sass": "^3.1.0",
+    "gulp-watch": "^4.3.11",
+    "gulp-webserver": "^0.9.1",
+    "marked": "^0.3.6"
+  }
+}
