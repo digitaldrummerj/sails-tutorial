@@ -32,7 +32,7 @@
 				<div class="chapter">
 					<h2 id="introduction">Introduction</h2>
 <p>Welcome to the Sails Tutorial.  </p>
-<p>In this tutorial, you&#39;ll learn how to build a Sails Api. Throughout the tutorial, you will be building a todo application.  </p>
+<p>In this tutorial, you&#39;ll learn how to build a Sails Api. Throughout the tutorial, you will be building a todo api.  </p>
 <h3 id="materials">Materials</h3>
 <ul>
 <li><a href="https://www.slideshare.net/digitaldrummerj/rapid-api-development-with-node-and-sails">Presentation</a></li>
@@ -42,188 +42,99 @@
 				<hr>
 				<div class="chapter">
 					<h2 id="getting-up-and-running">Getting up and running</h2>
-<p>To get started with Angular and Sails, we need to install and configure some software first.</p>
+<p>We will utilize a number of tools in our Sails development to allow us to create, debug, and deploy our application.  We will be utilizing the following tools:</p>
 <ul>
-<li>Windows, Mac, or Linux computer</li>
+<li>Platforms: Windows, Mac, or Linux computer</li>
+<li>Software:<ul>
 <li>git command line</li>
 <li>Node 6.x</li>
-<li>npm modules:<ul>
-<li>intc-cli</li>
-<li>grunt-cli</li>
 <li>sails</li>
-</ul>
-</li>
 <li>Postman    </li>
 <li>Visual Studio Code</li>
 </ul>
-<p>Sails development at Intel leverages a number of open source tools and frameworks to install, develop, test, debug, execute and deploy your application. Follow the sequence of steps below to install all required open source tools and frameworks to support Sails development on your system. </p>
-<p>Below are all of the steps to install and configure the software.  </p>
+</li>
+</ul>
+<p>Below are all of the steps required to install and configure the tools.  </p>
 <h3 id="windows-showing-file-extensions">Windows Showing File Extensions</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Turn On Windows Showing File Extensions
-  </h4>
-
 <div class="alert alert-danger" role="alert">
 <strong>Windows Only</strong>
 </div>
 
-<p>By default Windows is set to not show file extensions for known files which causes files such as .gitconfig and .npmrc to show up as just a period with no file extension.  To fix this we need to turn set Windows Explorer to show file extensions.</p>
+<p><strong>Non-Windows users can <a href="#chapter2.4">skip to next section</a></strong></p>
+<p>By default Windows is set to not show file extensions for known files which causes files such as .gitconfig and .npmrc to show up as just a period with no file extensions.  To fix this we need to set Windows Explorer to show file extensions.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Turn On Windows Showing File Extensions
+</h4>
+
 <ol>
 <li>Open Windows Explorer</li>
 <li><p>Click on the View Tab and select Options</p>
-<p> <img src="images/chapter1/windows-explorer-ribbon.png" style="height:147px;width:759px;margin-left: 10px"></p>
+<p> <img src="images/chapter1/windows-explorer-ribbon.png"></p>
 </li>
-</ol>
-<p>Once the &quot;Folder Options&quot; dialog is open: </p>
-<ol>
-<li>Click on the View Tab</li>
+<li><p>Click on the View Tab</p>
+</li>
 <li>Uncheck the &quot;Hide extensions for known file types&quot;</li>
 <li><p>Click Ok</p>
-<p> <img src="images/chapter1/windows-explorer-view-options.png" style="height:475px;width:382px;margin-left: 10px"></p>
+<p> <img src="images/chapter1/windows-explorer-view-options.png"></p>
 </li>
 </ol>
 <div class="exercise-end"></div>
 
-<h3 id="git">Git</h3>
-<div class="alert alert-danger" role="alert">
-<strong>Windows Only</strong>
-</div>
-
-<ol>
-<li>Download the latest version of <a href="http://git-scm.com/download">Git</a>.</li>
-<li>Run the installer. </li>
-<li><p>Click Next </p>
-<p> <img src="images/chapter1/git-setup-screen-1.png" style="height:490px;width:598px;margin-left: 10px;"></p>
-</li>
-<li><p>Check all except for the last checkbox and click Next</p>
-<p> <img src="images/chapter1/git-setup-screen-2.png" style="height:490px;width:598px;margin-left: 10px;"></p>
-</li>
-<li><p>Select the &quot;Use Git from the Windows Command Prompt&quot; and click Next</p>
-<p> <img src="images/chapter1/git-setup-screen-3.png" style="height:484px;width:598px;margin-left: 10px;"></p>
-</li>
-<li><p>Select the &quot;Checkout Windows-style, commit Unix-style line endings&quot; and Click Next</p>
-<p> <img src="images/chapter1/git-setup-screen-4.png" style="height:484px;width:598px;margin-left: 10px;"></p>
-</li>
-<li><p>Select the &quot;Use MinTTY (the default terminal of MSYS2)    </p>
-<p> <img src="images/chapter1/git-setup-screen-5.png" style="height:484px;width:598px;margin-left: 10px;"></p>
-</li>
-<li><p>Check &quot;Enable File system caching&quot; and &quot;Enable Git Credential Manager&quot; then click Install</p>
-<p> <img src="images/chapter1/git-setup-screen-6.png" style="height:484px;width:598px;margin-left: 10px;"></p>
-</li>
-<li><p>After the install has completed, open a command prompt and run:</p>
- <h4 class="exercise-start">
- Verify Git Version
- </h4>
-
-<pre><code> git --version
-</code></pre> <div class="exercise-end"></div>
-
-
-</li>
-</ol>
-<h4 id="git-credential-helper">Git Credential Helper</h4>
-<div class="alert alert-danger" role="alert">
-<strong>Windows Only</strong>
-</div>
-
-<div class="alert alert-info" role="alert">
-    Note: This should be already installed as part of the Git install
-</div>
-
-
-<p>Credential helper alleviates the need for you to continually enter your idsid and password when interacting with github.intel.com from the command line.</p>
-<ol>
-<li>Download the latest installer of <a href="https://github.com/Microsoft/Git-Credential-Manager-for-Windows">Git Credential Manager</a>.</li>
-<li>Run the installer. This will only take a few seconds and you&#39;ll see a command editor window briefly appear.</li>
-<li>The first time you try to interact with Github from the command prompt you&#39;ll be prompted for your idsid and password which Credential Helper will store.</li>
-</ol>
-<h4 id="git-profile-configuration">Git Profile configuration</h4>
-<p>The last item we need to do is to setup your Git profile. In the terminal window execute the following sets of commands. </p>
-<p>The first two commands setup your user profile which is important for checking in of code to be associated to you.  The next two commands setup proxy information for http and https.  Then we need to tell  Git to use &#39;https&#39; instead of the git protocol since the git protocol is blocked by the Intel firewalls.  The final command is for Windows machines to ignore the 260 character path limit and allow longer file paths when doing a git clone.</p>
-<h4 class="exercise-start">
-Git Config Commands
-</h4>
-
-
-<pre><code class="lang-bash">git config --global user.name &lt;Your name&gt;
-</code></pre>
-<pre><code class="lang-bash">git config --global user.email &lt;Your email address&gt;
-</code></pre>
-<pre><code class="lang-bash">git config --global --add core.longpaths true
-</code></pre>
-<div class="exercise-end"></div>
-
-
-
-<h4 class="exercise-start">
-Validate your Git configurations
-</h4>
-
-<pre><code class="lang-bash">git config --global --list
-</code></pre>
-<div class="exercise-end"></div>
-
-<p>Your output should look similar to:</p>
-<pre><code class="lang-bash">credential.helper=manager
-url.https://github.com.insteadof=git://github.com
-user.email=foo@foo.com
-user.name=Foo Bar
-core.longpaths=true
-</code></pre>
 <h3 id="node-js">Node.js</h3>
-<ol>
-<li><p>Download the latest stable version (LTS) of <a href="http://nodejs.org">NodeJS</a> which as of this writing is 6.11.0.  </p>
-</li>
-<li><p>Run the installer and accept all defaults.</p>
-</li>
-<li><p>Launch a command prompt or terminal window and run: </p>
+<p>NodeJS is used to power the Sails CLI as well as install all of our dependencies.  The Sails CLI will work with Node 4.x+.  Since I am using Angular for my UI which requires Node version 6.9+, we are going to install the latest LTS version of Node which as of this writing is 6.11.0..</p>
 <h4 class="exercise-start">
-  Verify Node Version Installed
+<b>Exervise</b>: Install Node
 </h4>
 
+<ol>
+<li>Download the latest stable version (LTS) of <a href="http://nodejs.org">NodeJS</a>.  </li>
+<li>Run the installer and accept all defaults.</li>
+<li><p>To validate that Node installed successfully, open a new command prompt and run the following command:</p>
 <pre><code class="lang-bash">node -v
 </code></pre>
-<div class="exercise-end"></div>
-
-
-
 </li>
 </ol>
+<div class="exercise-end"></div>
+
 <h3 id="sails-js">Sails.js</h3>
-<p>Open a terminal window if it&#39;s not already open and execute the command:</p>
 <h4 class="exercise-start">
-    Install Sails Globally
+    <b>Exercise:</b>: Install Sails Globally
 </h4>
 
-<pre><code class="lang-bash">npm install -g sails
+<ol>
+<li>Open a terminal window if it&#39;s not already open</li>
+<li><p>Execute the following command to install Sails:</p>
+<pre><code class="lang-bash"> npm install -g sails
 </code></pre>
-<div class="exercise-end"></div>
-
-<div class="exercise-start">
-<h4>Check Sails version installed</h4>
-</div>
-
-<pre><code>sails -v
-</code></pre><blockquote>
+</li>
+<li><p>Validate that Sails installed successfully by running the following command:</p>
+<pre><code class="lang-bash"> sails -v
+</code></pre>
+<blockquote>
 <p>0.12.13 as of this writing</p>
 </blockquote>
+</li>
+</ol>
 <div class="exercise-end"></div>
 
-
-<h3 id="visual-studio-code">Visual Studio Code</h3>
-<p>You could use any editor that you would like for Sails but I recommend using Visual Studio Code.</p>
-<p>You can download Visual Studio Code at <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></p>
-<p>Once the download finishes, launch the installer and accept all of the defaults.</p>
 <h3 id="postman">Postman</h3>
-<p>Postman is a useful utility for excersing a REST apis without having to create a UI.</p>
-<p>You can download it from <a href="https://www.getpostman.com/apps">https://www.getpostman.com/apps</a>.  </p>
-<p>Once the download finishes, launch the installer and accept all of the defaults.</p>
+<p>Postman is a useful utility for testing REST apis without having to create a UI.</p>
+<ol>
+<li>You can download it from <a href="https://www.getpostman.com/apps">https://www.getpostman.com/apps</a></li>
+<li>Once the download finishes, launch the installer and accept all of the defaults</li>
+</ol>
+<h3 id="visual-studio-code">Visual Studio Code</h3>
+<p>Visual Studio Code is Microsoft lightweight cross platform IDE.  You could use any editor that you would like to developer our  Sails but only Visual Studio Code has been tested against</p>
+<ol>
+<li>Download Visual Studio Code at <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></li>
+<li>Once the download finishes, launch the installer except all of the defaults</li>
+</ol>
 
 				</div>
 				<hr>
 				<div class="chapter">
 					<h2 id="creating-sails-api">Creating Sails Api</h2>
-<p>Now that we have our UI showing and adding data, we are going to move from hard coded data to using an Api we are going to create to interat with a data store.  We wll be using SailsJs as our Api framework.  </p>
+<p>We will utilize the Sails CLI to generate a project for us to developer our API with.  By default Sails comes with a view engine unless you tell it otherwise.  When we create our project we will only  be creating an API project and will not include the view engine as part of the project. </p>
 <h3 id="create-project">Create Project</h3>
 <h4 class="exercise-start">
     <b>Exercise</b>: Create Sails Project
@@ -235,7 +146,8 @@ core.longpaths=true
 <li>Navigate to where you store your project code (I store mine at c:\projects)</li>
 <li><p>Run the following command to generate the project.  </p>
 <pre><code> sails new sails-tutorial --no-linker --no-frontend
-</code></pre><p> This will create a new Sails project called sails-tutorial that is just the API without the ejs view engine or Grunt.  It will also install the npm dependencies as part of the project creation.</p>
+</code></pre> <div class="alert alert-info" role="alert">This will create a new Sails project called sails-tutorial and install the npm dependencies</div>
+
 </li>
 </ol>
 <div class="exercise-end"></div>
@@ -253,15 +165,219 @@ core.longpaths=true
 </ol>
 <div class="exercise-end"></div>
 
-<h3 id="generating-api">Generating Api</h3>
+<h3 id="navigating-around-visual-studio-code">Navigating around Visual Studio Code</h3>
+<p>Being able to effectively use your editor is key to being a super productive developer.  With Visual Studio Code, there are several shortcut keys that will help you out.</p>
+<table>
+<thead>
+<tr>
+<th>Purpose</th>
+<th>Key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Integrated Terminal</td>
+<td>ctrl+`</td>
+</tr>
+<tr>
+<td>Open File</td>
+<td>ctrl+p</td>
+</tr>
+<tr>
+<td>Switch Between Files</td>
+<td>ctrl+tab</td>
+</tr>
+<tr>
+<td>Switch Between Files Reverse</td>
+<td>ctrl+shift+tab</td>
+</tr>
+<tr>
+<td>Hide Side Menu</td>
+<td>ctrl+b</td>
+</tr>
+<tr>
+<td>Toggle Word Wrap for File</td>
+<td>alt+z</td>
+</tr>
+<tr>
+<td>Format Document</td>
+<td>ctrl+alt+f</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-info" role="alert"> I also split my screen in half with the tutorial on one side and the editor on the other side.  On Windows you can do this by using the win key + left arrow for the one you want on the left and then select the other for the right when windows prompts you.  You can also use win key + right arrow to make a Windows use half the screen on the right.</div>
+
+<h3 id="visual-studio-settings">Visual Studio Settings</h3>
+<p>There are 2 types of Settings in Visual Studio Code:  User and Workspace.  User settings apply to all instances of Visual Studio Code.  Workspace settings apply to the currently folder that you have open and are stored in a .vscode directory within the folder.</p>
+<p>There are a few settings that I like to change within Visual Studio Code.  </p>
+<ol>
+<li>Turn off the mini map in the upper right corder that I find distracting</li>
+<li>Turn off telemetry and crash reporter</li>
+<li>Turn on word wrap</li>
+<li>Turn on indent guides</li>
+</ol>
 <h4 class="exercise-start">
-  <b>Exercise</b>: Generating User and Todo Api
+  <b>Exercise</b>: Updating Settings
 </h4>
 
-<pre><code class="lang-bash">sails generate api user
+<ol>
+<li>Go under the Preferences -&gt; Settings (File -&gt; Preferences -&gt; Settings on Windows) and add the following setting to the &quot;User Settings&quot; tab</li>
+</ol>
+<pre><code class="lang-bash">{
+    &quot;telemetry.enableTelemetry&quot;: false,
+    &quot;telemetry.enableCrashReporter&quot;: false,
+    &quot;editor.minimap.enabled&quot;: false,
+    &quot;editor.wordWrap&quot;: &quot;on&quot;,
+    &quot;editor.wrappingIndent&quot;: &quot;same&quot;,
+    &quot;editor.renderIndentGuides&quot;: true,
+}
 </code></pre>
-<pre><code class="lang-bash">sails generate api todo
+<div class="exercise-end"></div>
+
+
+
+				</div>
+				<hr>
+				<div class="chapter">
+					<h2 id="sails-project-layout">Sails Project Layout</h2>
+<h3 id="api-controllers">API Controllers</h3>
+<blockquote>
+<p>api/controllers</p>
+</blockquote>
+<p>Controllers are defined in the api/controllers/ folder. You can put any files you like in that folder, but in order for them to be loaded by Sails as controllers, a file must end in Controller.js. </p>
+<p>Controllers (the C in MVC) are the principal objects in your Sails application that are responsible for responding to requests from a web browser, mobile application or any other system capable of communicating with a server. For many applications, the controllers will contain the bulk of your project’s business logic.</p>
+<p>Controllers are comprised of a set of methods called actions. Actions are bound to routes, so that when a client requests the route, the action is executed to perform some business logic and send a response. </p>
+<p>Using the command line you can generate a controller and model by using the sails generate command api</p>
+<pre><code class="lang-bash">sails generate api &lt;API Name&gt;
 </code></pre>
+<p>Get more details on Controllers at <a href="http://sailsjs.org/documentation/concepts/controllers">http://sailsjs.org/documentation/concepts/controllers</a></p>
+<h3 id="api-models">API Models</h3>
+<blockquote>
+<p>directory: api/models</p>
+</blockquote>
+<p>Models are defined in the api/models/ folder.</p>
+<p>A model represents a collection of structured data, usually corresponding to a single table or collection in a database. </p>
+<p> There are many built-in methods available on models, the most important of which are the query methods: <a href="http://sailsjs.org/documentation/reference/waterline/models/find.html">find</a>, <a href="http://sailsjs.org/documentation/reference/waterline/models/create.html">create</a>, <a href="http://sailsjs.org/documentation/reference/waterline/models/update.html">update</a>, and <a href="http://sailsjs.org/documentation/reference/waterline/models/destroy.html">destroy</a>. These methods are asynchronous - under the covers, Waterline has to send a query to the database and wait for a response.</p>
+<p>Get more details on Models at <a href="http://sailsjs.org/documentation/concepts/models-and-orm/models">http://sailsjs.org/documentation/concepts/models-and-orm/models</a></p>
+<h3 id="api-policies">API Policies</h3>
+<blockquote>
+<p>directory: api/policies</p>
+</blockquote>
+<p>Policies in Sails are used for authorization and access control.  Basically they let you allow or deny access to your controllers down to a fine level of granularity. </p>
+<p>Policies can be used for anything: HTTP BasicAuth, 3rd party single-sign-on, OAuth 2.0, or your own custom authorization/authentication scheme.</p>
+<p>Policies are files defined in the api/policies folder in your Sails app. Each policy file should contain a single function and ideally should just check one thing.</p>
+<p>Policies are really just Connect/Express middleware functions which run before your controllers. They are designed to be chained together.  </p>
+<p>See <a href="http://sailsjs.com/documentation/concepts/policies">Policies Docs</a></p>
+<h3 id="api-responses">API Responses</h3>
+<blockquote>
+<p>directory: api/responses</p>
+</blockquote>
+<p>Sails allows for customizable server responses. Sails comes with a handful of the most common response types by default that are found in the /api/responses directory of our project. To customize these, simply edit the appropriate .js file.</p>
+<p>Any .js script saved in the /api/responses folder will be executed by calling res.[responseName] in your controller. For example, /api/responses/serverError.js can be executed with a call to res.serverError(errors). The request and response objects are available inside the response script as this.req and this.res; this allows the actual response function to take arbitrary parameters (like serverError&#39;s errors parameter).</p>
+<p>See <a href="http://sailsjs.com/documentation/concepts/custom-responses">Response Docs</a></p>
+<h3 id="api-services">API Services</h3>
+<blockquote>
+<p>directory: api/services</p>
+</blockquote>
+<p>Services are defined in the api\services folder.</p>
+<p>Services are stateless libraries of functions (called helpers) that you can use from anywhere in your Sails app.  They are globalized and you don&#39;t have to use require() to access them.  </p>
+<p>See <a href="http://sailsjs.org/documentation/concepts/services">Services Docs</a></p>
+<h3 id="configuration-overview">Configuration Overview</h3>
+<p>Configuration files are defined in the config folder.</p>
+<p>While Sails dutifully adheres to the philosophy of convention-over-configuration, it is important to understand how to customize those handy defaults from time to time. For almost every convention in Sails, there is an accompanying set of configuration options that allow you to adjust or override things to fit your needs.</p>
+<p>Sails apps can be configured programmatically, by specifying environment variables or command-line arguments, by changing the local or global .sailsrc files, or (most commonly) using the boilerplate configuration files conventionally located in the config/ folder of new projects. The authoritative, merged-together configuration used in your app is available at runtime on the sails global as sails.config.</p>
+<p>Get more details on Configuration at <a href="http://sailsjs.org/documentation/concepts/configuration">http://sailsjs.org/documentation/concepts/configuration</a></p>
+<h3 id="configurations-environment">Configurations Environment</h3>
+<blockquote>
+<p>file: config/env/development.js and config/env/production.js</p>
+</blockquote>
+<h3 id="configurations-connections">Configurations Connections</h3>
+<blockquote>
+<p>file: config/connections.js</p>
+</blockquote>
+<p>Storage connections are configured in the connections.js file. You can also specify connections in your config/local.js or environment-specific config files and reference them in the connections.js file.</p>
+<p>See <a href="http://sailsjs.com/documentation/reference/configuration/sails-config-connections">Docs</a></p>
+<h3 id="configurations-cors">Configurations CORS</h3>
+<blockquote>
+<p>file: config/cors.js</p>
+</blockquote>
+<p>CORS specifies how HTTP requests to your app originating from foreign domains should be treated. It is primarily used to allow third-party sites to make AJAX requests to your app, which are normally blocked by browsers following the same-origin policy.</p>
+<p>See <a href="http://sailsjs.com/documentation/reference/configuration/sails-config-cors">Docs</a></p>
+<h3 id="configurations-locals">Configurations Locals</h3>
+<blockquote>
+<p>file: config/local.js</p>
+</blockquote>
+<p>The config/local.js file is used to configure a Sails app for your local environment. The settings in this file take precedence over all other config files except .sailsrc. Since they&#39;re intended only for local use, <strong>they should not be put under version control</strong> . Use local.js to store local database settings, change the port used when lifting an app on your computer, etc.</p>
+<h3 id="configurations-models">Configurations Models</h3>
+<blockquote>
+<p>file: config/models.js</p>
+</blockquote>
+<p>Your default project-wide model settings. We will be using it to store your migrate strategy and the default connection to use for your models.  </p>
+<p>You can also override the settings on a per-model basis.</p>
+<p>See <a href="http://sailsjs.com/documentation/reference/configuration/sails-config-models">Docs</a></p>
+<h3 id="configurations-policies">Configurations Policies</h3>
+<blockquote>
+<p>file: config/policies.js</p>
+</blockquote>
+<p>Your applications ACL (access control list) to apply to each controller and route.  Policies can be chained together using the array syntax.</p>
+<p>See <a href="http://sailsjs.com/documentation/reference/configuration/sails-config-policies">Docs</a></p>
+<h3 id="configurations-routes">Configurations Routes</h3>
+<blockquote>
+<p>file: config/routes.js</p>
+</blockquote>
+<p>Configuration for your routes.  For a given route you will configure: REST verb, url, controller and function that a route maps to.</p>
+<p>See <a href="http://sailsjs.com/documentation/reference/configuration/sails-config-routes">Docs</a></p>
+<h3 id="configurations-session">Configurations Session</h3>
+<blockquote>
+<p>file: config/session.js</p>
+</blockquote>
+<p>Configuration for Sails built-in session store.  You can add/get information from session by using req.session.  </p>
+<p>See <a href="http://sailsjs.com/documentation/reference/configuration/sails-config-session">Docs</a></p>
+
+				</div>
+				<hr>
+				<div class="chapter">
+					<h2 id="generating-api">Generating Api</h2>
+<p>Now that we have generated our project, before we can use it, we need to generate an Api.  Our Todo API will have two APIs:  User and Todo.  We will use the Sails CLI to generate the APIs.  </p>
+<p>When you generate a new api it will create a model and controller for the API.  A model describes the data store fields with attributes such as type, required, unique, and defaultsTo.  The controller will contain our functions that are related to the model.  </p>
+<p>Out of the box, Sails wires up all of the REST verbs (GET, POST, PUT, DELETE) for us and saves the data to a schema-less JSON file as the data store.  This means that immediately after running the generate command we can use the API without having to write any code. </p>
+<h3 id="generating-user-api">Generating User API</h3>
+<h4 class="exercise-start">
+  <b>Exercise</b>: Generating User API
+</h4>
+
+<ol>
+<li>Visual Studio Code has a built-in terminal that we can use to run our commands.  Open up the integrated terminal in Visual Studio Code  by using ctrl+` or view menu -&gt; Integrated Terminal</li>
+<li><p>Run the following command to create the user API</p>
+<pre><code class="lang-bash"> sails generate api user
+</code></pre>
+</li>
+<li><p>This will create 2 files for us:</p>
+<ul>
+<li>api\controllers\UserController.js</li>
+<li>api\models\User.js</li>
+</ul>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="generating-todo-api">Generating Todo Api</h3>
+<h4 class="exercise-start">
+  <b>Exercise</b>: Generating Todo API
+</h4>
+
+<ol>
+<li><p>In the Visual Studio Code integrated terminal (ctrl+` or view menu -&gt; Integrated Terminal), run the  following command to create the user API</p>
+<pre><code class="lang-bash"> sails generate api todo
+</code></pre>
+</li>
+<li><p>This will create 2 files for us:</p>
+<ul>
+<li>api\controllers\TodoController.js</li>
+<li>api\models\Todo.js</li>
+</ul>
+</li>
+</ol>
 <div class="exercise-end"></div>
 
 <h3 id="running-api">Running Api</h3>
@@ -270,65 +386,18 @@ core.longpaths=true
 </h4>
 
 <ol>
-<li>Visual Studio Code has a built-in terminal that we can use to run our commands.  On Windows, this is a powershell prompt.  To open the Integrated Terminal go under the View Menu and click on the Integrate Terminal or press Ctrl+`<ul>
-<li>You are free to use the regular command prompt outside of Visual Studio Code if you would like</li>
-</ul>
-</li>
-<li><p>Run</p>
+<li><p>In the Visual Studio Code integrated  terminal run the following command to start our API</p>
 <pre><code class="lang-bash"> sails lift
 </code></pre>
-<p> <img src="images/sails-lift.png" alt="sails lift output"></p>
+<p> <img src="images/db-migrate-question.png" alt="sails lift output"></p>
+ <div class="alert alert-danger" role="alert">You will notice that you are prompted with a big long question about database migration strategy to use.  Sails does not make any assumptions on how we want it to deal with database migrations as the models are updated.  Out of the box Sails uses a schema-less JSON file as the data store.  This is what allows us to immediately started working with our API.  Until we set the database migration strategy to use, we will be prompted to select one when we run sails lift.</div>
 </li>
-<li><p>???? ADD POSTMAN INFO ????</p>
+<li><p>When prompted for the migration strategy, type 2 and press enter</p>
+<p> <img src="images/db-migrate-answer.png" alt="sails lift started">    </p>
+ <div class="alert alert-info" role="alert">You will see that a message shows up that says &quot;Temporarily using sails.config.models.migrate=&quot;alert&quot;...&quot;</div>
 </li>
-</ol>
-<div class="exercise-end"></div>
-
-
-				</div>
-				<hr>
-				<div class="chapter">
-					<h2 id="sails-layout">Sails Layout</h2>
-<h3 id="controllers">Controllers</h3>
-<p>Controllers are defined in the api/controllers/ folder. You can put any files you like in that folder, but in order for them to be loaded by Sails as controllers, a file must end in Controller.js. </p>
-<p>Controllers (the C in MVC) are the principal objects in your Sails application that are responsible for responding to requests from a web browser, mobile application or any other system capable of communicating with a server. For many applications, the controllers will contain the bulk of your project’s business logic.</p>
-<p>Controllers are comprised of a set of methods called actions. Actions are bound to routes, so that when a client requests the route, the action is executed to perform some business logic and send a response. </p>
-<p>Using the command line you can generate a controller and model by using the sails generate command api</p>
-<pre><code class="lang-bash">sails generate api &lt;API Name&gt;
-</code></pre>
-<p>Get more details on Controllers at <a href="http://sailsjs.org/documentation/concepts/controllers">http://sailsjs.org/documentation/concepts/controllers</a></p>
-<h3 id="models">Models</h3>
-<p>Models are defined in the api/models/ folder.</p>
-<p>A model represents a collection of structured data, usually corresponding to a single table or collection in a database. </p>
-<p> There are many built-in methods available on models, the most important of which are the query methods: <a href="http://sailsjs.org/documentation/reference/waterline/models/find.html">find</a>, <a href="http://sailsjs.org/documentation/reference/waterline/models/create.html">create</a>, <a href="http://sailsjs.org/documentation/reference/waterline/models/update.html">update</a>, and <a href="http://sailsjs.org/documentation/reference/waterline/models/destroy.html">destroy</a>. These methods are asynchronous - under the covers, Waterline has to send a query to the database and wait for a response.</p>
-<p>Get more details on Models at <a href="http://sailsjs.org/documentation/concepts/models-and-orm/models">http://sailsjs.org/documentation/concepts/models-and-orm/models</a></p>
-<h3 id="configuration">Configuration</h3>
-<p>Configuration files are defined in the config folder.</p>
-<p>While Sails dutifully adheres to the philosophy of convention-over-configuration, it is important to understand how to customize those handy defaults from time to time. For almost every convention in Sails, there is an accompanying set of configuration options that allow you to adjust or override things to fit your needs.</p>
-<p>Sails apps can be configured programmatically, by specifying environment variables or command-line arguments, by changing the local or global .sailsrc files, or (most commonly) using the boilerplate configuration files conventionally located in the config/ folder of new projects. The authoritative, merged-together configuration used in your app is available at runtime on the sails global as sails.config.</p>
-<p><strong>config/local.js</strong></p>
-<p>The config/local.js file is used to configure a Sails app for your local environment. The settings in this file take precedence over all other config files except .sailsrc. Since they&#39;re intended only for local use, <strong>they should not be put under version control</strong> . Use local.js to store local database settings, change the port used when lifting an app on your computer, etc.</p>
-<p>Get more details on Configuration at <a href="http://sailsjs.org/documentation/concepts/configuration">http://sailsjs.org/documentation/concepts/configuration</a></p>
-<h3 id="services">Services</h3>
-<p>Services are defined in the api\services folder.</p>
-<p>Services are stateless libraries of functions (called helpers) that you can use from anywhere in your Sails app.  They are globalized and you don&#39;t have to use require() to access them.  </p>
-<p>See <a href="http://sailsjs.org/documentation/concepts/services/creating-a-service">Creating a Service Documentation</a></p>
-
-				</div>
-				<hr>
-				<div class="chapter">
-					<h2 id="add-todo-api">Add Todo Api</h2>
-<p>Now that we have our api project created, we need to add the actual todo api.  Sails comes with a generate command to create new apis.  When you create a new api it will create a model and controller.  A model describes the fields that are part of the api and any attributes such as type, required, etc.  The controller hold custom logic for your api.  </p>
-<p>By default, Sails comes with a built-in REST api and uses an in memory json data store.  This means that we can immediately start using the Api without having to write any code. </p>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Add  Todo Api
-</h4>
-
-<ol>
-<li>In the open command prompt navigate into the sails-tutorial that we created when you generate the api project</li>
-<li><p>Run the following command to generate the a new api called todo  </p>
-<pre><code> sails generate api todo
-</code></pre></li>
+<li><p>The API is now started up and we are ready to do some testing with Postman</p>
+</li>
 </ol>
 <div class="exercise-end"></div>
 
@@ -336,87 +405,125 @@ core.longpaths=true
     <b>Exercise</b>: Get Data
 </h4>
 
+
 <ol>
 <li>Open up Postman</li>
-<li><p>Set the VERB to GET and the url to </p>
-<p> <img src="images/postman-get.png" alt="Postman get"></p>
+<li>Set the VERB to GET (<em>step 1</em>)</li>
+<li><p>Set the url to <a href="http://localhost:1337/user">http://localhost:1337/user</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/user
+</code></pre>
 </li>
+<li><p>Click the Send button (<em>step 3</em>)</p>
+</li>
+<li>Right now you should have gotten an empty array as we have not added any data yet (<em>step 4</em>)</li>
+<li>You should have also gotten a status code of 200 (<em>step 5</em>)</li>
 </ol>
+<p><img src="images/postman-user-get-blank.png" alt="Postman get"></p>
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Insert Data
 </h4>
 
+<p>We can insert data using the REST verb POST.</p>
 <ol>
-<li><p>We can test POST (insert) by changing the Postman VERB to POST, setting the body to type Raw as application/json and making the body text the following JSON </p>
+<li>In Postman, change the VERB to POST (<em>step 1</em>)</li>
+<li><p>Leave the url set to <a href="http://localhost:1337/user">http://localhost:1337/user</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/user
+</code></pre>
+</li>
+<li><p>Click on the Body tab (<em>step 3</em>)</p>
+</li>
+<li>Click raw radio button (<em>step 4</em>)</li>
+<li>Change the type dropdown from &quot;Text&quot; to &quot;application/json&quot; (<em>step 5</em>)</li>
+<li><p>Set the request body to the following JSON (<em>step 6</em>)</p>
 <pre><code class="lang-json"> {
-     &quot;todo&quot;: &quot;get something done&quot;,
-     &quot;completed&quot;: false
+     &quot;email&quot;: &quot;foo@foo.com&quot;,
+     &quot;password&quot;: &quot;123456&quot;
  }
 </code></pre>
-<p> <img src="images/postman-post.png" alt="Postman POST"></p>
 </li>
-<li><p>You will get an output similar to the following.  You will also get the same output if you re-run the GET command from above.</p>
+<li><p>Click the Send button (<em>step 7</em>)</p>
+</li>
+<li><p>You will get an output similar to the following. (<em>step 8 </em>)</p>
 <pre><code class="lang-json"> {
-     &quot;todo&quot;: &quot;get something done&quot;,
-     &quot;completed&quot;: false,
-     &quot;createdAt&quot;: &quot;2017-02-20T21:29:44.501Z&quot;,
-     &quot;updatedAt&quot;: &quot;2017-02-20T21:29:44.501Z&quot;,
+     &quot;email&quot;: &quot;foo@foo.com&quot;,
+     &quot;password&quot;: &quot;123456&quot;,
+     &quot;createdAt&quot;: &quot;2017-07-23T22:09:29.601Z&quot;,
+     &quot;updatedAt&quot;: &quot;2017-07-23T22:09:29.601Z&quot;,
      &quot;id&quot;: 1
  }
 </code></pre>
 </li>
+<li><p>You should also have a status code of 201 (<em>step 9</em>)</p>
+</li>
 </ol>
+<p><img src="images/postman-user-post.png" alt="Postman POST"></p>
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Update Data
 </h4>
 
+<p>We can update data using the REST verb PUT.</p>
 <ol>
-<li><p>We can test PUT (update) by changing the Postman VERB to PUT, change the url to <a href="http://localhost:1337/v1/todos/1">http://localhost:1337/v1/todos/1</a>, setting the body to type Raw as application/json and making the body text the following JSON </p>
+<li>In Postman VERB to PUT (<em>step 1</em>)</li>
+<li>Change the url to <a href="http://localhost:1337/user/1">http://localhost:1337/user/1</a> (<em>step 2</em>)</li>
+<li>Click on the Body tab (<em>step 3</em>)</li>
+<li>Click raw radio button (<em>step 4</em>)</li>
+<li>Change the type dropdown from &quot;Text&quot; to &quot;application/json&quot; (<em>step 5</em>)</li>
+<li><p>Set the request body to the following JSON (<em>step 6</em>)</p>
 <pre><code class="lang-json"> {
-     &quot;todo&quot;: &quot;updated to done&quot;,
-     &quot;completed&quot;: true,
-     &quot;id&quot;: 1
+     &quot;email&quot;: &quot;foo1@foo.com&quot;,
+     &quot;password&quot;: &quot;1234567&quot;
  }
 </code></pre>
-<p> <img src="images/postman-put.png" alt="Postman PUT"></p>
 </li>
-<li><p>You will get an output similar to the following.  You will also get the same output if you re-run the GET command from above.</p>
-<pre><code class="lang-json">{
-     &quot;todo&quot;: &quot;updated to done&quot;,
-     &quot;completed&quot;: true,
-     &quot;createdAt&quot;: &quot;2017-02-20T21:29:44.501Z&quot;,
-     &quot;updatedAt&quot;: &quot;2017-02-20T21:35:42.743Z&quot;,
+<li><p>Click the Send button (<em>step 7</em>)</p>
+</li>
+<li><p>You will get an output similar to the following. (<em>step 8</em>)</p>
+<pre><code class="lang-json"> {
+     &quot;email&quot;: &quot;foo1@foo.com&quot;,
+     &quot;password&quot;: &quot;1234567&quot;,
+     &quot;createdAt&quot;: &quot;2017-07-23T22:09:29.601Z&quot;,
+     &quot;updatedAt&quot;: &quot;2017-07-23T22:09:29.601Z&quot;,
      &quot;id&quot;: 1
  }
 </code></pre>
+</li>
+<li><p>You should also have a status code of 201 (<em>step 9</em>)</p>
 </li>
 </ol>
+<p><img src="images/postman-user-put.png" alt="Postman PUT"></p>
+<div class="alert alert-info" role="alert">Right now update returns the record that we just deleted.  In the next Sails release it will not return any data.</div>
+
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Delete Data
 </h4>
 
-
+<p>We can update data using the REST verb DELETE.</p>
 <ol>
-<li><p>We can test Delete by changing the Postman VERB to DELETE, change the url to <a href="http://localhost:1337/v1/todos/1">http://localhost:1337/v1/todos/1</a> .  For the delete command you do not need a body json to accompany it.</p>
-<p> <img src="images/postman-delete.png" alt="Postman DELETE"></p>
-</li>
-<li><p>You will get an output similar to the following.  You will also get the same output if you re-run the GET command from above.</p>
-<pre><code class="lang-json">{
-     &quot;todo&quot;: &quot;updated to done&quot;,
-     &quot;completed&quot;: true,
-     &quot;createdAt&quot;: &quot;2017-02-20T21:29:44.501Z&quot;,
-     &quot;updatedAt&quot;: &quot;2017-02-20T21:35:42.743Z&quot;,
+<li>In Postman VERB to DELETE (<em>step 1</em>)</li>
+<li>Change the url to <a href="http://localhost:1337/user/1">http://localhost:1337/user/1</a> (<em>step 2</em>)</li>
+<li>Click the Send button (<em>step 3</em>)</li>
+<li><p>You will get an output similar to the following.  (<em>step 4</em>)</p>
+<pre><code class="lang-json"> {
+     &quot;email&quot;: &quot;foo1@foo.com&quot;,
+     &quot;password&quot;: &quot;1234567&quot;,
+     &quot;createdAt&quot;: &quot;2017-07-23T22:09:29.601Z&quot;,
+     &quot;updatedAt&quot;: &quot;2017-07-23T22:09:29.601Z&quot;,
      &quot;id&quot;: 1
  }
 </code></pre>
 </li>
+<li><p>You should also have a status code of 200 (<em>step 5</em>)</p>
+</li>
 </ol>
+<p><img src="images/postman-user-delete.png" alt="Postman PUT"></p>
+<div class="alert alert-info" role="alert">Right now delete returns the record that we just deleted.  In the next Sails release it will not return any data.</div>
+
 <div class="exercise-end"></div>
 
 
@@ -424,6 +531,7 @@ core.longpaths=true
 				<hr>
 				<div class="chapter">
 					<h2 id="overriding-built-in-rest-verbs">Overriding Built-In REST Verbs</h2>
+<p>Up to this point we have been using all of the built-in REST function.  However, we are going to want to create our own function with our own business logic.  </p>
 <p>To override the built-in get, post, put, and delete, you need to create methods in the controller.  Below is the mapping of REST verbs to function names.</p>
 <ul>
 <li>POST =&gt; create </li>
@@ -436,7 +544,7 @@ core.longpaths=true
 <pre><code class="lang-javascript">METHOD_NAME: function method_nameFn(req, res) {
         var body = req.body; // get body
         var id = req.params.id; // get querystring parameter id
-        body.wwid = req.session.isso.raw.id; //get wwid from isso object.  if isso is implemented
+        body.id = req.session.isso.raw.id; 
 }
 </code></pre>
 <p>In the locking down routes chapter, we will override all of the built-in verbs.</p>

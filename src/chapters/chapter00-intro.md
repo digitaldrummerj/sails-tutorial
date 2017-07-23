@@ -2,7 +2,7 @@
 
 Welcome to the Sails Tutorial.  
 
-In this tutorial, you'll learn how to build a Sails Api. Throughout the tutorial, you will be building a todo application.  
+In this tutorial, you'll learn how to build a Sails Api. Throughout the tutorial, you will be building a todo api.  
 
 ### Materials
 

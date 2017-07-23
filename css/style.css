@@ -468,8 +468,7 @@ table {
   padding: 15px;
   margin-bottom: 20px;
   border: 1px solid #b1babf;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
+  border-radius: 2px;
   margin-left: 10px;
   margin-right: 10px; }
   .alert h4 {
@@ -492,17 +491,15 @@ table {
 
 .alert-success {
   border-color: #d6e9c6;
-  border-top-width: 3px;
   background-color: #dff0d8;
-  color: #000000; }
+  color: #C4D600; }
   .alert-success hr {
     border-top-color: #c9e2b3; }
   .alert-success .alert-link {
-    color: black; }
+    color: #95a300; }
 
 .alert-info {
   border-color: #bce8f1;
-  border-top-width: 3px;
   background-color: #d9edf7;
   color: #00aeef; }
   .alert-info hr {
@@ -512,7 +509,6 @@ table {
 
 .alert-warning {
   border-color: #faebcc;
-  border-top-width: 3px;
   background-color: #fcf8e3;
   color: #FFA300; }
   .alert-warning hr {
@@ -522,7 +518,6 @@ table {
 
 .alert-danger {
   border-color: #ebccd1;
-  border-top-width: 3px;
   background-color: #f2dede;
   color: #ed1c24; }
   .alert-danger hr {

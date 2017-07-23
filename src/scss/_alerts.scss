@@ -5,7 +5,7 @@
 //
  @mixin alert-variant($background, $border, $text-color){
    border-color: $border;
-   border-top-width: 3px;
+  //  border-top-width: 3px;
    background-color: $background;
    color: $text-color;
   hr {
@@ -27,7 +27,7 @@
   padding: $alert-padding;
   margin-bottom: $line-height-computed;
   border: 1px solid $light-gray;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  // box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   border-radius: $alert-border-radius;
   margin-left: 10px;
   margin-right: 10px;

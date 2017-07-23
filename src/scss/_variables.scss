@@ -1,60 +1,48 @@
-$red:					#ed1c24;
-$orange: 			#FFA300; 
-$yellow: 			#F3D54E; 
+$red:   			#ed1c24;
+$orange:     		#FFA300; 
+$yellow: 	    	#F3D54E; 
+$blue: 			    #0071c5; 
+$dark-blue:		    #003C71; 
+$light-blue:	    #00aeef; 
+$pale-blue:		    #7ed3f7; 
+$green:			    #C4D600;
+$light-gray: 	    #b1babf; 
+$gray:			    #939598; 
+$dark-gray: 	    #53565a; 
+$white:             #ffffff;
+$black:             #000000;
+$light-red:		    #ff6450;
+$dark-red: 		    #931c1a;
+$lighter-gray1:	    #f7f8f9;
+$lighter-gray2:	    #edeff0;
+$lighter-gray3:	    #e1e5e7;
+$darker-gray:	    #333;
+$darkest-gray:	    #111;
+$brand-success-bg:  #dff0d8 !default;
+$brand-info-bg:     #d9edf7 !default;
+$brand-warning-bg:  #fcf8e3 !default;
+$brand-danger-bg:   #f2dede !default;
 
-$blue: 				#0071c5; 
-$dark-blue:		#003C71; 
-$light-blue:	#00aeef; 
-$pale-blue:		#7ed3f7; 
-
-$green: 			#C4D600;
-
-$light-gray: 	#b1babf; 
-$gray: 				#939598; 
-$dark-gray: 	#53565a; 
-
-$white: #ffffff;
-$black: #000000;
-
-
-$light-red: 			#ff6450;
-$dark-red:   			#931c1a;
-$hover-red: 			$light-red;
-$tapped-red: 			$dark-red;
-
-$lighter-blue:		$pale-blue;
-$hover-blue:		$light-blue;
-$tapped-blue: 		$dark-blue;
-
-$lighter-gray1:		#f7f8f9;
-$lighter-gray2:		#edeff0;
-$lighter-gray3:		#e1e5e7;
-$lighter-gray: 		$lighter-gray2;
-$darker-gray: 		#333;
-$darkest-gray: 		#111;
-$hover-gray: 			$lighter-gray;
-$tapped-gray:			$light-gray;
-
-
-//** Map Bootstrap gray colors to Intel equivalents
+$hover-red:             $light-red;
+$tapped-red: 	        $dark-red;
+$lighter-blue:	        $pale-blue;
+$hover-blue:	        $light-blue;
+$tapped-blue:	        $dark-blue;
+$lighter-gray: 	        $lighter-gray2;
+$hover-gray: 	        $lighter-gray;
+$tapped-gray:	        $light-gray;
 $gray-darker:           $darker-gray 	!default; 
 $gray-dark:             $dark-gray 		!default;   
 $gray:                  $gray 			!default; 
 $gray-light:            $light-gray 	!default;  
 $gray-lighter:          $lighter-gray 	!default;
-
-//** Map Bootstrap brand colors to Intel colors
 $brand-success:         $green !default;
 $brand-info:            $light-blue;
 $brand-warning:         $orange !default;//$yellow !default;
 $brand-danger:          $red !default;
 
-$brand-success-bg:         #dff0d8 !default;
-$brand-info-bg:            #d9edf7 !default;
-$brand-warning-bg:         #fcf8e3 !default;
-$brand-danger-bg:          #f2dede !default;
 
-$border-radius-base:        4px !default;
+$border-radius-base:        2px !default;
 $border-radius-large:       6px !default;
 $border-radius-small:       3px !default;
 
@@ -96,7 +84,7 @@ $alert-border-radius:         $border-radius-base !default;
 $alert-link-font-weight:      bold !default;
 
 $alert-success-bg:            $state-success-bg !default;
-$alert-success-text:          $black !default;//$state-success-text !default;
+$alert-success-text:          $state-success-text !default;
 $alert-success-border:        $state-success-border !default;
 
 $alert-info-bg:               $state-info-bg !default;
