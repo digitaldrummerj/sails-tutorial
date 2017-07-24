@@ -534,23 +534,60 @@
 				</div>
 				<hr>
 				<div class="chapter">
-					<h2 id="model-configuration">Model Configuration</h2>
-<h3 id="connection">Connection</h3>
+					<h2 id="model-migration-strategy">Model Migration Strategy</h2>
+<p>Right now everytime you start sails lift, you are asked what migration strategy you want to use to keep the model in sync with the data store.  Being asked each time becomes annoying very quickly.  Lets go ahead and look at migration strategy options.</p>
+<p>As you are developing your API and changing the models, you need to decide on the strategy to use for keeping your model in sync with your data store.  </p>
+<h3 id="migration-options">Migration Options</h3>
+<p>There are 3 options:</p>
+<table>
+<thead>
+<tr>
+<th>Migration Strategy</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>safe</td>
+<td>never auto-migrate.  you will perform the migration by hand</td>
+</tr>
+<tr>
+<td>alter</td>
+<td>auto-migrate columns/fields but attempt to keep existing data</td>
+</tr>
+<tr>
+<td>drop</td>
+<td>wipe/drop ALL data and rebuild models every time you run sails lift</td>
+</tr>
+</tbody>
+</table>
+<h3 id="how-auto-migrations-work">How auto-migrations work</h3>
+<p>When you lift your Sails app in a development environment, the configured auto-migration strategy will run. </p>
+<ul>
+<li><p>If you are using migrate: &#39;safe&#39;, then nothing extra will happen at all. </p>
+</li>
+<li><p>If you are using drop or alter, Sails will load every record in your development database into memory, then drop and recreate the physical layer representation of the data (i.e. tables/collections/sets/etc.) This allows any breaking changes you&#39;ve made in your model definitions, like removing a uniqueness constraint, to be automatically applied to your development database. </p>
+</li>
+<li><p>As well if you are using alter, Sails will then attempt to re-seed the freshly generated tables/collections/sets with the records it saved earlier.</p>
+</li>
+</ul>
+<h3 id="can-i-use-auto-migrations-in-production-">Can I use auto-migrations in production?</h3>
+<p>The drop and alter auto-migration strategies in Sails exist as a feature for your convenience during development, and when running automated tests. They are not designed to be used with data you care about. Please take care to never use drop or alter with a production dataset. </p>
+<p>As a failsafe, any time you lift your app in a production environment, Sails always uses migrate: &#39;safe&#39;, no matter what you have configured.</p>
+<p>In many cases, hosting providers automatically set the NODE_ENV environment variable to &quot;production&quot; when they detect a Node.js app. Even so, please don&#39;t rely only on that failsafe, and take the usual precautions to keep your users&#39; data safe. </p>
+<h3 id="set-migrate-strategy">Set Migrate Strategy</h3>
 <h4 class="exercise-start">
-    <b>Exercise</b>: Connection Configuration
+    <b>Exercise</b>: Set Migrate Strategy
 </h4>
 
-<pre><code class="lang-javascript">connection: &#39;localDiskDb&#39;,
+<p>Since we are in development, we are going to use the alter strategy to have Sails keep our model in sync with our data store.  </p>
+<ol>
+<li>Open the config\models.js file</li>
+<li><p>At the bottom of the file uncomment the migrate line</p>
+<pre><code class="lang-javascript"> migrate: &#39;alter&#39;
 </code></pre>
-<div class="exercise-end"></div>
-
-<h3 id="migrate-strategy">Migrate Strategy</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Model Migrate Strategy
-</h4>
-
-<pre><code class="lang-javascript">migrate: &#39;alter&#39; // ok for development
-</code></pre>
+</li>
+</ol>
 <div class="exercise-end"></div>
 
 				</div>
@@ -1348,6 +1385,12 @@ completed: {
 				</div>
 				<hr>
 				<div class="chapter">
+					<h2 id="connecting-to-mongodb">Connecting to MongoDB</h2>
+<p>Coming soon...</p>
+
+				</div>
+				<hr>
+				<div class="chapter">
 					<h2 id="cors-configuration">CORS Configuration</h2>
 <h4 class="exercise-start">
     <b>Exercise</b>: CORS Config
@@ -1360,15 +1403,10 @@ completed: {
 				</div>
 				<hr>
 				<div class="chapter">
-					<h2 id="connecting-to-mongodb">Connecting to MongoDB</h2>
+					<h2 id="deploying">Deploying</h2>
+<h3 id="deploy-to-heroku">Deploy to Heroku</h3>
 <p>Coming soon...</p>
-
-				</div>
-				<hr>
-				<div class="chapter">
-					<h2 id="deploy-to-heroku">Deploy to Heroku</h2>
-<p>Coming soon...</p>
-<h2 id="deploy-to-azure">Deploy to Azure</h2>
+<h3 id="deploy-to-azure">Deploy to Azure</h3>
 <p>Coming soon...</p>
 
 				</div>
