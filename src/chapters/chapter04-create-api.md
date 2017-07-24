@@ -71,6 +71,8 @@ Out of the box, Sails wires up all of the REST verbs (GET, POST, PUT, DELETE) fo
 
 <div class="exercise-end"></div>
 
+### Get Data
+
 <h4 class="exercise-start">
     <b>Exercise</b>: Get Data
 </h4>
@@ -92,6 +94,7 @@ Out of the box, Sails wires up all of the REST verbs (GET, POST, PUT, DELETE) fo
 
 <div class="exercise-end"></div>
 
+### Insert Data
 <h4 class="exercise-start">
     <b>Exercise</b>: Insert Data
 </h4>
@@ -136,6 +139,7 @@ We can insert data using the REST verb POST.
 
 <div class="exercise-end"></div>
 
+### Update Data
 <h4 class="exercise-start">
     <b>Exercise</b>: Update Data
 </h4>
@@ -177,6 +181,8 @@ We can update data using the REST verb PUT.
 <div class="alert alert-info" role="alert">Right now update returns the record that we just deleted.  In the next Sails release it will not return any data.</div>
 
 <div class="exercise-end"></div>
+
+### Delete Data
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Delete Data
