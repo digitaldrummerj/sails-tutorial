@@ -127,6 +127,9 @@ We are now ready to test that our security is working.
 
 1. For the User routes, if you try to do any call besides a POST, you will get a message that you need to login first
 1. For the Todo routes, if you try to do any call you will get a message that you need to login first
+
+    * Even though we have not created any custom routes all of the standards REST verbs are already wired up
+    
 1. Once you call the login route you will be able to do the following:
 
     * For User routes, you will be able to do a GET, PUT, and DELETE call.  

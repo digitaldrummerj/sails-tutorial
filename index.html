@@ -669,10 +669,10 @@ Function Format Example
 				<div class="chapter">
 					<h2 id="user-api-logic">User API Logic</h2>
 <p>In this chapter we are going to add logic to allow a user to login, signup, logout, perform CRUD (<strong>C</strong>reate, <strong>R</strong>ead, <strong>U</strong>pdate, <strong>D</strong>elete) operations on the data that they own.</p>
-<h3 id="signup">Signup</h3>
-<p>The first thing that we are going to do is override the POST verb with our own create function that will allow a user to signup for our Todo Api.  Within the sign up function we will validate the email address is an actual email address, then encrypt the password before creating a user record in the data store and finally return back the newly created user.</p>
+<h3 id="sign-up">Sign up</h3>
+<p>The first thing that we are going to do is override the POST verb with our own create function that will allow a user to signup for our Todo API.  Within the sign up function we will validate the email address is an actual email address, then encrypt the password before creating a user record in the data store and finally return back the newly created user.</p>
 <h4 class="exercise-start">
-    <b>Exercise</b>: Create Stub
+    <b>Exercise</b>: Create Sign up Stub
 </h4>
 
 <p>For the sign up since we will be overriding the POST verb, we will be creating a function called create.</p>
@@ -804,73 +804,14 @@ var user = {
 <li><strong>Note:</strong> When we set the req.session.user was are only setting the id. This is so that the encryptedPassword hash does not end up in the in-memory session store.</li>
 </ul>
 </li>
-<li><p>In order to test the create function, we have to restart the sails lift.  Stop sails lift using ctrl+c and run sails lift </p>
-</li>
+</ol>
+<h4 id="verify-sign-up-api">Verify Sign up API</h4>
+<ol>
+<li>In order to test the create function, we have to restart the sails lift.  Stop sails lift using ctrl+c and run sails lift </li>
 <li><p>Now if you run the POST call against the User API, you will see if returns back a user with an encryptedPassword (<em>step 8</em>)</p>
 <p> <img src="images/postman-user-custom-create.png" alt="Postman user custom create"></p>
 </li>
 </ol>
-<p>If you run into issues, here is the full code for the create function</p>
-<pre><code class="lang-javascript">var EmailAddresses = require(&#39;machinepack-emailaddresses&#39;);
-var Passwords = require(&#39;machinepack-passwords&#39;);
-
-module.exports = {
-create: function createFn(req, res) {
-    var email = req.param(&#39;email&#39;);
-
-    // validate the email address that is passed in
-    EmailAddresses.validate({
-        string: email,
-    }).exec({
-    // called if there is a general error
-    error: function (err) {
-        return res.serverError(err);
-    },
-
-    // called if email is invalid
-    invalid: function () {
-        return res.badRequest(&#39;Does not look like an email address to me!&#39;);
-    },
-
-    // called if the email validation passed
-    success: function () {
-        // encrypt the password
-        // get password from the body of the request with the req.param call
-        Passwords.encryptPassword({
-            password: req.param(&#39;password&#39;),
-        }).exec({
-        // if there is an error return a server error 500 status code
-        error: function (err) {
-            return res.serverError(err);
-        },
-
-        // if success then move on to the next step
-        success: function (result) {
-            // create user with email and encryptedPassword to add to the database
-            var user = {
-                email: email,
-                encryptedPassword: result
-            };
-
-            // User waterline to create a new user by calling .create and passing in the local user variable
-            User.create(user, function (err, createdResult) {
-                // check for errors
-                if (err) return res.serverError(err);
-
-                // add user id to session state
-                req.session.user = createdResult.id;
-
-                // return back created user with a status code of 200
-                // see api\responses\ok.js for what the ok response is actually doing
-                return res.ok(createdResult);
-            });
-        }
-        })
-    }
-    });
-}
-},
-</code></pre>
 <div class="exercise-end"></div>
 
 <h3 id="remove-password-from-json">Remove Password from JSON</h3>
@@ -902,8 +843,10 @@ create: function createFn(req, res) {
 <pre><code class="lang-javascript"> return obj;
 </code></pre>
 </li>
-<li><p>You must restart sails lift for the changes to take effect</p>
-</li>
+</ol>
+<h4 id="verify-tojson-works">Verify toJSON Works</h4>
+<ol>
+<li>You must restart sails lift for the changes to take effect</li>
 <li><p>Now if you run the GET call for the user, you will see that the encryptedPassword field is no longer returned back from the API</p>
 <p> <img src="images/postman-user-without-encryptedPassword.png" alt="User Get without EncryptedPassword"></p>
 </li>
@@ -926,8 +869,10 @@ create: function createFn(req, res) {
  },
 </code></pre>
 </li>
-<li><p>You must restart sails lift for the changes to take effect</p>
-</li>
+</ol>
+<h4 id="verify-unique-attribute">Verify Unique Attribute</h4>
+<ol>
+<li>You must restart sails lift for the changes to take effect</li>
 <li><p>If you now try to do a POST again for the user with the same email you will get an error that unique constraint was violated.  </p>
 <p> <img src="images/email-unique-error.png" alt="Unique Error"></p>
 </li>
@@ -974,6 +919,9 @@ create: function createFn(req, res) {
 </li>
 <li><p>By create the file in the response folder, the response is automatically wired up and available to use.</p>
 </li>
+</ol>
+<h4 id="verify-custom-response">Verify Custom Response</h4>
+<ol>
 <li>You must restart sails lift for the changes to take effect</li>
 <li><p>If you now try to do a POST again for the user with the same email you will get an error that looks much nicer than before and has a status code of 409.  You could also change the response message to be a standard format that the whole API will use instead of just plain text if you wanted to</p>
 <p> <img src="images/already-in-use.png" alt="already in use response"></p>
@@ -999,6 +947,11 @@ create: function createFn(req, res) {
 </code></pre>
 </li>
 </ol>
+<h4 id="verify-encryped-password-field-attributes">Verify Encryped Password Field Attributes</h4>
+<ol>
+<li>You must restart sails lift for the changes to take effect</li>
+<li>Now you have to input a password when calling the sign up API and it must be a string.</li>
+</ol>
 <div class="exercise-end"></div>
 
 <h3 id="login">Login</h3>
@@ -1014,7 +967,8 @@ create: function createFn(req, res) {
 </li>
 <li><p>We are going to add a function called login with the standard Sails controller function definition</p>
 <pre><code class="lang-javascript"> login: function loginFn(req, res) {
- }
+
+ },
 </code></pre>
 </li>
 <li><p>The first thing we are going to do is attempt to pull the user out of the database based on the email address.  We will be using the Waterline findOne function to ensure that we only pull back the 1 record.  We will get the email from req.param </p>
@@ -1023,6 +977,7 @@ create: function createFn(req, res) {
          email: req.param(&#39;email&#39;) 
      }, 
      function (err, result) {
+
      }
  )
 </code></pre>
@@ -1035,63 +990,212 @@ create: function createFn(req, res) {
 <pre><code class="lang-javascript"> if (!result) return res.notFound();
 </code></pre>
 </li>
-<li><p>If we found the user then we want to use the password machine pack that we used earlier to validate that the unecrypted and encrypted passwords match.  The response from the machine pack will be either error, incorrect or success.  If there was an error we will return a server error.  If the password was incorrect we will return a forbidden error.  If it was success then we will add the session user and return the user.   </p>
+<li><p>If we found the user then we want to use the Node Machine password pack that we used earlier to validate that the unencrypted and encrypted passwords match.  The response from the machine pack will be either error, incorrect or success.  If there was an error we will return a server error.  If the password was incorrect we will return a forbidden error.  If it was success then we will add the session user and return the user.   </p>
+<pre><code class="lang-javascript"> Passwords.checkPassword({
+     passwordAttempt: req.param(&#39;password&#39;),
+     encryptedPassword: result.encryptedPassword
+ }).exec({
+     error: function (err) {
+         return res.serverError(err);
+     },
+
+     incorrect: function () {
+         return res.forbidden(&#39;Invalid Login, Please Try Again!&#39;);
+     },
+
+     success: function () {
+         req.session.user = result.id;
+
+         return res.ok(result);
+     }
+ })
+</code></pre>
+<ul>
+<li><strong>Note:</strong> When we set the req.session.user was are only setting the id. This is so that the encryptedPassword hash does not end up in the in-memory session store.</li>
+</ul>
 </li>
 </ol>
-<pre><code>```javascript
-Passwords.checkPassword({
-    passwordAttempt: req.param(&#39;password&#39;),
-    encryptedPassword: result.encryptedPassword
-}).exec({
-    error: function (err) {
-        return res.serverError(err);
-    },
-
-    incorrect: function () {
-        return res.forbidden(&#39;Invalid Login, Please Try Again!&#39;);
-    },
-
-    success: function () {
-        req.session.user = result.id;
-
-        return res.ok(result);
-    }
-})
-```
-
-* **Note:** When we set the req.session.user was are only setting the id. This is so that the encryptedPassword hash does not end up in the in-memory session store.
-</code></pre><div class="exercise-end"></div>
+<h4 id="verify-login-api">Verify Login API</h4>
+<ol>
+<li>You must restart sails lift for the changes to take effect</li>
+<li>Open Postman</li>
+<li>Set the REST verb to POST (<em>step 1</em>)</li>
+<li><p>Set the URL to <a href="http://localhost:1337/user/login">http://localhost:1337/user/login</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/user/login
+</code></pre>
+</li>
+<li><p>Click on the Body tab (<em>step 3</em>)</p>
+</li>
+<li>Select Raw (<em>step 4</em>)</li>
+<li>Set the type to JSON (application/json) (<em>step 5</em>)</li>
+<li><p>Set the body of the request to the following to pass in the email and password fields.  Change the email and password values as needed for the user that you created earlier with the sign up function (<em>step 6</em>)</p>
+<pre><code class="lang-javascript"> {
+     &quot;email&quot;: &quot;foo@foo.com&quot;,
+     &quot;password&quot;: &quot;123456&quot;
+ }
+</code></pre>
+</li>
+<li><p>Click the Send button (<em>step 7</em>)</p>
+</li>
+<li>If everything worked you should now be logged and your user information was returned back to you (<em>step 8</em>) with a 200 status code (<em>step 9</em>).</li>
+</ol>
+<p><img src="images/postman-user-login.png" alt="already in use response"></p>
+<div class="exercise-end"></div>
 
 <h3 id="logout">Logout</h3>
+<p>Now that we can either sign up or login to the API, we need to be able to log out of the API.  Logging out of the API in our case is really simple.  We are going to clear the req user session and return back a response ok (200 status code)</p>
 <h4 class="exercise-start">
-    <b>Exercise</b>: 
+    <b>Exercise</b>: Implement Logout Function
 </h4>
 
-<pre><code class="lang-javascript">logout: function logoutFn(req, res) {
-    req.session.user = null;
+<ol>
+<li>Open the api\controllers\UserController.js</li>
+<li><p>Add the logout function below to the existing functions</p>
+<pre><code class="lang-javascript"> logout: function logoutFn(req, res) {
+     req.session.user = null;
 
-    return res.ok();
-},
+     return res.ok();
+ },
 </code></pre>
+</li>
+</ol>
+<h4 id="verify-logout-api">Verify Logout API</h4>
+<ol>
+<li>You must restart sails lift for the changes to take effect</li>
+<li>Open Postman</li>
+<li>Set the verb to GET (<em>step 1</em>)</li>
+<li><p>Set the url to <a href="http://localhost:1337/user/logout">http://localhost:1337/user/logout</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/user/logout
+</code></pre>
+</li>
+<li><p>Click the send button (<em>step 4</em>)</p>
+</li>
+<li>You should get an empty response with a status code of 200 (<em>step 4</em>)</li>
+</ol>
+<p><img src="images/postman-user-logout.png" alt="Postman logout"></p>
+<div class="exercise-end"></div>
+
+<h3 id="who-is-logged-in-">Who is Logged In?</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Get Logged in User Info
+</h4>
+
+<ol>
+<li><p>Open the api\controllers\UserController.js </p>
+<pre><code class="lang-bash"> UserController.js
+</code></pre>
+</li>
+<li><p>We are going to add a function called userIdentity</p>
+<pre><code class="lang-javascript"> userIdentity: function (req, res) {
+ },
+</code></pre>
+</li>
+<li><p>Within the userIdentity function we are going to use the Waterline ORM find a single record in the data store by running findOne</p>
+<ul>
+<li>We will query by id againt the req.session.user</li>
+<li>We will do the standard error trapping looking for errors and missing records.</li>
+<li><p>If user was found then return an ok response</p>
+<pre><code class="lang-javascript">User.findOne(
+  { id: req.session.user }, 
+  function (err, result) {
+      if (err) return res.serverError(err);
+      if (!result) return res.notFound();
+
+      return res.ok(result);      
+  }
+);
+</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="verify-user-identity-api">Verify User Identity API</h4>
+<p>We can test the userIdentity API by making a GET call to <a href="http://localhost:1337/user/userIdentity">http://localhost:1337/user/userIdentity</a> after we have called the login API</p>
+<ol>
+<li>You must restart sails lift for the changes to take effect</li>
+<li>Open Postman</li>
+<li>Make a call to the login API like we did before so that we have a logged in user </li>
+<li>Open another tab in Postman </li>
+<li>Set the verb to GET (<em>step 1</em>)</li>
+<li><p>Set the url to <a href="http://localhost:1337/user/userIdentity">http://localhost:1337/user/userIdentity</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/user/userIdentity
+</code></pre>
+</li>
+<li><p>Click the Send Button (<em>step 3</em>)</p>
+</li>
+<li>You should see your user information returned (<em>step 4</em>) with a 200 status code (<em>step 5</em>)</li>
+</ol>
+<p><img src="images/postman-user-identity.png" alt="Postman User Identity"></p>
 <div class="exercise-end"></div>
 
 <h3 id="get-user-info">Get User Info</h3>
+<p>Right now if you sign up a 2nd user and then do a GET on the user API,  you will be able to see both records.  This is not great from a privacy standpoint.  You should only be able to see your user information.  </p>
+<p><img src="images/postman-user-show-all.png" alt="Postman Show All Users"></p>
+<p>In order to restrict the data, we are going to override the find (get all) and findOne (get 1 record by id) functions to only return back the information for the logged in user.</p>
+<p>Even though we will only ever be returning 1 record back, we want to use the find function which returns an array instead of the findOne that returns a single record.  This way we keep the expected return type of a GET all REST call which is an array of records.</p>
 <h4 class="exercise-start">
-    <b>Exercise</b>: 
+    <b>Exercise</b>: Override Find Function
 </h4>
 
-<pre><code class="lang-javascript">find: function findFn(req, res) {
-    User.find(
-        { id: req.session.user }, 
-        function (err, results) {
-            if (err) return res.serverError(err);
-            if (results.length === 0) return res.notFound();
+<ol>
+<li><p>Open api/controllers/UserController.js</p>
+<pre><code class="lang-bash"> usercontroller.js
+</code></pre>
+</li>
+<li><p>Add the following function stub to override the find function</p>
+<pre><code class="lang-javascript"> find: function findFn(req, res) {
 
-            return res.ok(results);
-        }
-    );
-},
-findOne: function findOneFn(req, res) {
+ },
+</code></pre>
+</li>
+<li><p>Within the find function, we want to use Waterline to call the find function on the User object, filter by the user we have stored in session, and then have our standard callback to process the results</p>
+<pre><code class="lang-javascript"> User.find(
+     { id: req.session.user }, 
+     function (err, results) {
+
+     }
+ );
+</code></pre>
+</li>
+<li><p>Within the callback the first thing we want to do is check for errors</p>
+<pre><code class="lang-javascript"> if (err) return res.serverError(err);
+</code></pre>
+</li>
+<li><p>Then we want to check if the user was found or not.  Since the find method returns an array we can look at the length to determine if the record was returned.   If the record is not found, we will return a response notFound.</p>
+<pre><code class="lang-javascript"> if (results.length === 0) return res.notFound();
+</code></pre>
+</li>
+<li><p>The final thing we are going to do is return the user record that was found with a 200 status code.  </p>
+<pre><code class="lang-javascript">return res.ok(results);
+</code></pre>
+</li>
+</ol>
+<h4 id="verify-find-override">Verify Find Override</h4>
+<ol>
+<li>You must restart sails lift for the changes to take effect</li>
+<li>Open Postman</li>
+<li>If you have not created a 2nd user, make a call the sign up API and create a 2nd user</li>
+<li>If you have already created the 2nd user, then call the login API to login    </li>
+<li>Open another tab in Postman </li>
+<li>Set the verb to GET (<em>step 1</em>)</li>
+<li><p>Set the url to <a href="http://localhost:1337/user">http://localhost:1337/user</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/user
+</code></pre>
+</li>
+<li><p>Click the Send Button (<em>step 3</em>)</p>
+</li>
+<li>You should only see your user information returned (<em>step 4</em>) with a 200 status code (<em>step 5</em>)</li>
+</ol>
+<p><img src="images/postman-user-find.png" alt="Postman Find Override"></p>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Find by Id Override
+</h4>
+
+<p>To override the find by get (<a href="http://localhost:1337/user/2">http://localhost:1337/user/2</a>) we need to override the findOne function.  The findOne is similar to the find that we just created except that we will only be returning a single record back instead of an array with 1 record.</p>
+<p>In the api/user/usercontroller.js add the following function that will call the Waterline findOne function on the User object, filtering by the id stored in request session and then running our standard error checks before return back the user record.</p>
+<pre><code class="lang-javascript">findOne: function findOneFn(req, res) {
     User.findOne(
         { id: req.session.user }, 
         function (err, result) {
@@ -1103,43 +1207,372 @@ findOne: function findOneFn(req, res) {
     );
 },
 </code></pre>
-<div class="exercise-end"></div>
-
-<h3 id="delete-user">Delete User</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: 
-</h4>
-
-<pre><code class="lang-javascript">
+<h4 id="verify-find-by-id-override">Verify Find by Id Override</h4>
+<ol>
+<li>You must restart sails lift for the changes to take effect</li>
+<li>Open Postman</li>
+<li>Call the login API to login    </li>
+<li>Open another tab in Postman </li>
+<li>Set the verb to GET (<em>step 1</em>)</li>
+<li><p>Set the url to <a href="http://localhost:1337/user/2">http://localhost:1337/user/2</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/user/2
 </code></pre>
+<ul>
+<li><p>The 2 at the end of the url is the Id field value for the user record.</p>
+<div class="alert alert-info"><strong>Note</strong> You can technically use any value as long as it is not a route name since we are getting the Id from the req.session.user and not from the querystring.</div>
+</li>
+</ul>
+</li>
+<li><p>Click the Send Button (<em>step 3</em>)</p>
+</li>
+<li>You should only see your user information returned (<em>step 4</em>) with a 200 status code (<em>step 5</em>)</li>
+</ol>
+<p><img src="images/postman-user-findOne.png" alt="Postman Find Override"></p>
 <div class="exercise-end"></div>
 
 <h3 id="update-user">Update User</h3>
+<p>The next thing we are going to do is override the update function so that we can only update our own user.</p>
+<p>We will allow the user to change their email and password.  We need to make sure to valid that email address and encrypt the password.</p>
 <h4 class="exercise-start">
-    <b>Exercise</b>: 
+    <b>Exercise</b>: Create Update Function
 </h4>
 
-<pre><code class="lang-javascript">
+<ol>
+<li><p>Open the api/models/UserController.js</p>
+<pre><code class="lang-bash"> UserController.js
 </code></pre>
+</li>
+<li><p>Create the update function stub</p>
+<pre><code class="lang-javascript"> update: function updateFn(req, res){
+
+ },
+</code></pre>
+</li>
+<li><p>Within the update function we want to use the Node Machine email pack to validate the email address like we did in the create function</p>
+<pre><code class="lang-javascript"> EmailAddresses.validate({
+   string: req.param(&#39;email&#39;),
+ }).exec({
+   error: function (err) {
+     return res.serverError(err);
+   },
+
+   invalid: function () {
+     return res.badRequest(&#39;Does not look like an email address to me!&#39;);
+   },
+
+   success: function () {
+
+   },
+ });
+</code></pre>
+</li>
+<li><p>If the email address is validate we want to encrypt the password like we did before with the Node Machine pack passwords</p>
+<pre><code class="lang-javascript"> Passwords.encryptPassword({
+     password: req.param(&#39;password&#39;),
+ }).exec({
+     error: function(err){
+     return res.serverError(err);
+     },
+
+     success: function(result){
+
+     },
+ });
+</code></pre>
+</li>
+<li><p>Lastly, in the success of the encrypt response, we want to update the user record in the data store and return back the results.</p>
+<pre><code class="lang-javascript"> var user = {
+     email: req.param(&#39;email&#39;),
+     encryptedPassword: result,
+ }
+ User.update(
+     { id: req.session.user },
+     user,
+     function (err, result) {
+     if (err) return res.serverError(err);
+     if (results.length === 0) return res.notFound();
+
+     return res.ok(result);
+     }
+ );
+</code></pre>
+ <div class="alert alert-info" role="alert"><strong>Note:</strong> The Waterline update call returns an array of records.</div>
+
+</li>
+</ol>
+<h4 id="verify-update-override">Verify Update Override</h4>
+<ol>
+<li>You must restart sails lift for the changes to take effect</li>
+<li>Open Postman</li>
+<li>Call the login API to login    </li>
+<li>Open another tab in Postman </li>
+<li><p>Set the verb to PUT (<em>step 1</em>)</p>
+ <div class="alert alert-info" role="alert">PUT is the REST verb for doing an update</div>
+</li>
+<li><p>Set the url to <a href="http://localhost:1337/user/2">http://localhost:1337/user/2</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/user/2
+</code></pre>
+<ul>
+<li><p>The 2 at the end of the url is the Id field value for the user record.</p>
+<div class="alert alert-info"><strong>Note</strong> You can technically use any value as long as it is not a route name since we are getting the Id from the req.session.user and not from the querystring.</div>
+</li>
+</ul>
+</li>
+<li><p>Click on the Body tab (<em>step 3</em>)</p>
+</li>
+<li>Select Raw (<em>step 4</em>)</li>
+<li>Set the type to JSON (application/json) (<em>step 5</em>)</li>
+<li><p>Set the body of the request to the following to pass in the email and password fields.  Change the email and password values (<em>step 6</em>)</p>
+<pre><code class="lang-javascript"> {
+     &quot;email&quot;: &quot;foo2@foo.com&quot;,
+     &quot;password&quot;: &quot;1234567&quot;
+ }
+</code></pre>
+</li>
+<li><p>Click the Send button (<em>step 7</em>)</p>
+</li>
+<li>If everything worked you should now be logged and your user information was returned back to you (<em>step 8</em>) with a 200 status code (<em>step 9</em>).</li>
+</ol>
+<p><img src="images/postman-user-update.png" alt="Postman Find Override"></p>
+<div class="alert alert-danger" role="alert">If you try to login in with the original email, you should get a 404 not found error</div>
+<div class="alert alert-danger" role="alert">If you try to login with the original password, you should get a 403 Forbidden status with an &quot;Invalid Login, Please Try Again!&quot; message
+</div>
+
 <div class="exercise-end"></div>
 
-<h3 id="who-is-logged-in-">Who is Logged In?</h3>
+<h3 id="delete-user">Delete User</h3>
+<p>The last thing that we are going to do is to override the delete function to ensure that we can only delete our own user.</p>
+<p>The user must be logged in before they can be deleted.  </p>
 <h4 class="exercise-start">
     <b>Exercise</b>: 
 </h4>
 
-<pre><code class="lang-javascript">userIdentity: function (req, res) {
-    User.findOne(
-        { id: req.session.user }, 
-        function (err, result) {
-            if (err) return res.serverError(err);
-            if (!result) return res.notFound();
-
-            return res.ok(result);      
-        }
-    );
-},
+<p>We will call the Waterline delete function on the User object and make sure to filter it by the user id that is stored in req.session.user.  We will then do our standard error traping and return back the result.  We will also clear out the req.session.user since we are deleting the user and we want to make sure that they are actually logged out of the API.</p>
+<p>Even though we are deleting the user we will return back the record that we just deleted.  This way we keep with the way the Sails does it out of the box.</p>
+<ol>
+<li><p>Open the api/controllers/UserController.js</p>
+<pre><code class="lang-bash"> UserController.js
 </code></pre>
+</li>
+<li><p>Add the following function for the delete call</p>
+<pre><code class="lang-javascript"> delete: function deleteFn(req, res) {
+     User.delete(
+         {
+         id: req.session.user
+         }
+     ), function (err, result) {
+         if (err) return res.serverError(err);
+         if (!result) return res.notFound();
+
+         req.session.user = null;
+         return res.ok(result);
+     }
+ }
+</code></pre>
+</li>
+</ol>
+<h4 id="verify-delete-override">Verify Delete Override</h4>
+<ol>
+<li>You must restart sails lift for the changes to take effect</li>
+<li>Open Postman</li>
+<li>Call the login API to login    </li>
+<li>Open another tab in Postman </li>
+<li><p>Set the verb to DELETE (<em>step 1</em>)</p>
+ <div class="alert alert-info" role="alert">PUT is the REST verb for doing an update</div>
+</li>
+<li><p>Set the url to <a href="http://localhost:1337/user/2">http://localhost:1337/user/2</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/user/2
+</code></pre>
+<ul>
+<li><p>The 2 at the end of the url is the Id field value for the user record.</p>
+<div class="alert alert-info"><strong>Note</strong> You can technically use any value as long as it is not a route name since we are getting the Id from the req.session.user and not from the querystring.</div>
+</li>
+</ul>
+</li>
+<li><p>Click the Send button (<em>step 3</em>)</p>
+</li>
+<li>If everything worked you should now be logged and your user information was returned back to you (<em>step 4</em>) with a 200 status code (<em>step 5</em>).</li>
+</ol>
+<p><img src="images/postman-user-delete.png" alt="Postman Find Override"></p>
+<div class="exercise-end"></div>
+
+<p>We have now completed the initial functionality for our User API.  Next we will configure our security policies so that we do not have to remember to login before running any of the function.</p>
+
+				</div>
+				<hr>
+				<div class="chapter">
+					<h2 id="locking-down-the-api">Locking Down the Api</h2>
+<p>Update to this point you have had to remember to call the Login or Signup routes before you can see or update Todo items.  It would be much better if we directed users with errors messages that tell them that they need to perform an authentication call before trying to make a call.  </p>
+<p>In order to do the authentication checks, Sails uses policies to lock down routes.  A policy is essential a function that returns a true/false value for whatever check you need to do.  </p>
+<p>Policies are stored in the api\policies directory.  By creating a file in  the policies directory, they are automatically ready to be used to lock down a route.  </p>
+<p>We will be creating 2 policies:  </p>
+<ol>
+<li>Check if you are logged in  </li>
+<li>Check if you are logged out</li>
+</ol>
+<h3 id="policy-to-check-if-logged-in">Policy to Check if Logged In</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create Is Logged In Policy
+</h4>
+
+<ol>
+<li><p>In the api\policies folder, create a new JavaScript file called isLoggedIn.js</p>
+<pre><code class="lang-bash"> isLoggedIn.js
+</code></pre>
+</li>
+<li><p>The function format for Sails policies as follows.  It takes in a request, response, and next option.  </p>
+<pre><code class="lang-javascript"> module.exports = function(req, res, next) {
+
+ }
+</code></pre>
+</li>
+<li><p>Within the policy function, we will use the req.session.user to determine if the user has logged in yet or not.  If the user has logged in, we need call next to go to the next policy in the chain.  If the user has not logged in, we will return the forbidden response.</p>
+<pre><code class="lang-javascript"> module.exports = function(req, res, next) {
+     if (req.session.user) {
+         return next();
+     }
+
+     return res.forbidden(&#39;Please Login First.&#39;);
+ }
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="policy-to-check-if-logged-out">Policy to Check if Logged Out</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create Is Logged Out Policy
+</h4>
+
+<ol>
+<li><p>In the api\policies folder, create a new JavaScript file called isLoggedOut.js</p>
+<pre><code class="lang-bash"> isLoggedOut.js
+</code></pre>
+</li>
+<li><p>Remember that the function format for Sails policies as follows.  It takes in a request, response, and next option.  </p>
+<pre><code class="lang-javascript"> module.exports = function(req, res, next) {
+
+ }
+</code></pre>
+</li>
+<li><p>Within the policy function, we will use the req.session.user to determine if the user has logged in yet or not.  If the user has not logged in, we will call to go to the next policy in the chain. If the user has logged in, we will return the forbidden response.  </p>
+<pre><code class="lang-javascript"> module.exports = function(req, res, next) {
+     if (!req.session.user) {
+         return next();
+     }
+
+     return res.forbidden(&#39;Please Logout First&#39;);
+ }
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="locking-down-routes">Locking Down Routes</h3>
+<p>Now that we have both of our policies created, we need to configure which routes will use which policy.  </p>
+<table>
+<thead>
+<tr>
+<th>Controller</th>
+<th>Function</th>
+<th>Policy</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UserController</td>
+<td>login</td>
+<td>true</td>
+<td>Let everyone make a call to login</td>
+</tr>
+<tr>
+<td>UserController</td>
+<td>create</td>
+<td>[&#39;isLoggedOut&#39;]</td>
+<td>Make sure that you are logged out before trying to login again</td>
+</tr>
+<tr>
+<td>UserController</td>
+<td>*</td>
+<td>[&#39;isLoggedIn&#39;]</td>
+<td>All routes that aren&#39;t already configured will use this policy chain</td>
+</tr>
+<tr>
+<td>TodoController</td>
+<td>*</td>
+<td>[&#39;isLoggedIn&#39;]</td>
+<td>All routes in Todo controller will use this policy</td>
+</tr>
+</tbody>
+</table>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Locking Down Routes
+</h4>
+
+<ol>
+<li><p>Open config\policies.js</p>
+<pre><code class="lang-bash"> policies.js
+</code></pre>
+</li>
+<li><p>Add the following to the list of models that are locked down</p>
+<pre><code class="lang-JavaScript"> UserController: {
+     &#39;login&#39;: true,
+     &#39;create&#39;: [&#39;isLoggedOut&#39;],
+     &#39;*&#39;: [&#39;isLoggedIn&#39;]
+ },
+ TodoController: {
+     &#39;*&#39;: [&#39;isLoggedIn&#39;]
+ }
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="testing-out-policy">Testing out policy</h3>
+<p>We are now ready to test that our security is working.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Testing policy
+</h4>
+
+<ol>
+<li><p>Restart sails lift.  If you already have sails lift running, you need to ctrl+c to stop running it and restart it.  Policies do not automatically up themselves as you change the code until sails lift is restarted.</p>
+</li>
+<li><p>For the User routes, if you try to do any call besides a POST, you will get a message that you need to login first</p>
+</li>
+<li><p>For the Todo routes, if you try to do any call you will get a message that you need to login first</p>
+<ul>
+<li>Even though we have not created any custom routes all of the standards REST verbs are already wired up</li>
+</ul>
+</li>
+<li><p>Once you call the login route you will be able to do the following:</p>
+<ul>
+<li>For User routes, you will be able to do a GET, PUT, and DELETE call.  </li>
+<li>For Todo routes, you will be able to call all routes</li>
+<li>If you call the login route again, you will get a message that you need to logout first.</li>
+</ul>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+				</div>
+				<hr>
+				<div class="chapter">
+					<h2 id="routing">Routing</h2>
+<h3 id="controlling-the-api-route-url">Controlling the Api Route Url</h3>
+<p>In the Api project, you can also change how to route to the custom method by setting your own route in the config\routes.js file.  </p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create Todo
+</h4>
+
+<ol>
+<li><p>Open the config/routes.js</p>
+<pre><code class="lang-javascript"> &#39;GET /user/identity&#39;: &#39;UserController.userIdentity&#39;
+</code></pre>
+</li>
+<li><p>For the route to take effect you will need to stop the <code>sails lift</code> with a ctrl+c and then re-run the <code>sails lift</code></p>
+</li>
+</ol>
 <div class="exercise-end"></div>
 
 				</div>
@@ -1315,179 +1748,6 @@ completed: {
    via: &#39;user&#39;
  },
 </code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-				</div>
-				<hr>
-				<div class="chapter">
-					<h2 id="locking-down-the-api">Locking Down the Api</h2>
-<p>Update to this point you have had to remember to call the Login or Signup routes before you can see or update Todo items.  It would be much better if we directed users with errors messages that tell them that they need to perform an authentication call before trying to make a call.  </p>
-<p>In order to do the authentication checks, Sails uses policies to lock down routes.  A policy is essential a function that returns a true/false value for whatever check you need to do.  </p>
-<p>Policies are stored in the api\policies directory.  By creating a file in  the policies directory, they are automatically ready to be used to lock down a route.  </p>
-<p>We will be creating 2 policies:  </p>
-<ol>
-<li>Check if you are logged in  </li>
-<li>Check if you are logged out</li>
-</ol>
-<h3 id="policy-to-check-if-logged-in">Policy to Check if Logged In</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Create Is Logged In Policy
-</h4>
-
-<ol>
-<li><p>In the api\policies folder, create a new JavaScript file called isLoggedIn.js</p>
-<pre><code class="lang-bash"> isLoggedIn.js
-</code></pre>
-</li>
-<li><p>The function format for Sails policies as follows.  It takes in a request, response, and next option.  </p>
-<pre><code class="lang-javascript"> module.exports = function(req, res, next) {
-
- }
-</code></pre>
-</li>
-<li><p>Within the policy function, we will use the req.session.user to determine if the user has logged in yet or not.  If the user has logged in, we need call next to go to the next policy in the chain.  If the user has not logged in, we will return the forbidden response.</p>
-<pre><code class="lang-javascript"> module.exports = function(req, res, next) {
-     if (req.session.user) {
-         return next();
-     }
-
-     return res.forbidden(&#39;Please Login First.&#39;);
- }
-</code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h3 id="policy-to-check-if-logged-out">Policy to Check if Logged Out</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Create Is Logged Out Policy
-</h4>
-
-<ol>
-<li><p>In the api\policies folder, create a new JavaScript file called isLoggedOut.js</p>
-<pre><code class="lang-bash"> isLoggedOut.js
-</code></pre>
-</li>
-<li><p>Remember that the function format for Sails policies as follows.  It takes in a request, response, and next option.  </p>
-<pre><code class="lang-javascript"> module.exports = function(req, res, next) {
-
- }
-</code></pre>
-</li>
-<li><p>Within the policy function, we will use the req.session.user to determine if the user has logged in yet or not.  If the user has not logged in, we will call to go to the next policy in the chain. If the user has logged in, we will return the forbidden response.  </p>
-<pre><code class="lang-javascript"> module.exports = function(req, res, next) {
-     if (!req.session.user) {
-         return next();
-     }
-
-     return res.forbidden(&#39;Please Logout First&#39;);
- }
-</code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h3 id="locking-down-routes">Locking Down Routes</h3>
-<p>Now that we have both of our policies created, we need to configure which routes will use which policy.  </p>
-<table>
-<thead>
-<tr>
-<th>Controller</th>
-<th>Function</th>
-<th>Policy</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>UserController</td>
-<td>login</td>
-<td>true</td>
-<td>Let everyone make a call to login</td>
-</tr>
-<tr>
-<td>UserController</td>
-<td>create</td>
-<td>[&#39;isLoggedOut&#39;]</td>
-<td>Make sure that you are logged out before trying to login again</td>
-</tr>
-<tr>
-<td>UserController</td>
-<td>*</td>
-<td>[&#39;isLoggedIn&#39;]</td>
-<td>All routes that aren&#39;t already configured will use this policy chain</td>
-</tr>
-<tr>
-<td>TodoController</td>
-<td>*</td>
-<td>[&#39;isLoggedIn&#39;]</td>
-<td>All routes in Todo controller will use this policy</td>
-</tr>
-</tbody>
-</table>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Locking Down Routes
-</h4>
-
-<ol>
-<li><p>Open config\policies.js</p>
-<pre><code class="lang-bash"> policies.js
-</code></pre>
-</li>
-<li><p>Add the following to the list of models that are locked down</p>
-<pre><code class="lang-JavaScript"> UserController: {
-     &#39;login&#39;: true,
-     &#39;create&#39;: [&#39;isLoggedOut&#39;],
-     &#39;*&#39;: [&#39;isLoggedIn&#39;]
- },
- TodoController: {
-     &#39;*&#39;: [&#39;isLoggedIn&#39;]
- }
-</code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h3 id="testing-out-policy">Testing out policy</h3>
-<p>We are now ready to test that our security is working.</p>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Testing policy
-</h4>
-
-<ol>
-<li><p>Restart sails lift.  If you already have sails lift running, you need to ctrl+c to stop running it and restart it.  Policies do not automatically up themselves as you change the code until sails lift is restarted.</p>
-</li>
-<li><p>For the User routes, if you try to do any call besides a POST, you will get a message that you need to login first</p>
-</li>
-<li>For the Todo routes, if you try to do any call you will get a message that you need to login first</li>
-<li><p>Once you call the login route you will be able to do the following:</p>
-<ul>
-<li>For User routes, you will be able to do a GET, PUT, and DELETE call.  </li>
-<li>For Todo routes, you will be able to call all routes</li>
-<li>If you call the login route again, you will get a message that you need to logout first.</li>
-</ul>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-				</div>
-				<hr>
-				<div class="chapter">
-					<h2 id="routing">Routing</h2>
-<h3 id="controlling-the-api-route-url">Controlling the Api Route Url</h3>
-<p>In the Api project, you can also change how to route to the custom method by setting your own route in the config\routes.js file.  </p>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Create Todo
-</h4>
-
-<ol>
-<li><p>Open the config/routes.js</p>
-<pre><code class="lang-javascript"> &#39;GET /user/identity&#39;: &#39;UserController.userIdentity&#39;
-</code></pre>
-</li>
-<li><p>For the route to take effect you will need to stop the <code>sails lift</code> with a ctrl+c and then re-run the <code>sails lift</code></p>
 </li>
 </ol>
 <div class="exercise-end"></div>
