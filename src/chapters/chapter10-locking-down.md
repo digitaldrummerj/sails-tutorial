@@ -34,13 +34,11 @@ We will be creating 2 policies:
 1. Within the policy function, we will use the req.session.user to determine if the user has logged in yet or not.  If the user has logged in, we need call next to go to the next policy in the chain.  If the user has not logged in, we will return the forbidden response.
 
     ```javascript
-    module.exports = function(req, res, next) {
-        if (req.session.user) {
-            return next();
-        }
-
-        return res.forbidden('Please Login First.');
+    if (req.session.user) {
+        return next();
     }
+
+    return res.forbidden('Please Login First.');
     ```
 
 <div class="exercise-end"></div>
@@ -68,13 +66,11 @@ We will be creating 2 policies:
 1. Within the policy function, we will use the req.session.user to determine if the user has logged in yet or not.  If the user has not logged in, we will call to go to the next policy in the chain. If the user has logged in, we will return the forbidden response.  
 
     ```javascript
-    module.exports = function(req, res, next) {
-        if (!req.session.user) {
-            return next();
-        }
-
-        return res.forbidden('Please Logout First');
+    if (!req.session.user) {
+        return next();
     }
+
+    return res.forbidden('Please Logout First');
     ```
 
 <div class="exercise-end"></div>
@@ -100,7 +96,7 @@ Now that we have both of our policies created, we need to configure which routes
     policies.js
     ```
 
-1. Add the following to the list of models that are locked down
+1. Within the module.exports.policies, add the following to the list of models that are locked down
 
     ```JavaScript
     UserController: {
@@ -115,7 +111,7 @@ Now that we have both of our policies created, we need to configure which routes
 
 <div class="exercise-end"></div>
 
-### Testing out policy
+### Verify The Policies Are Working
 
 We are now ready to test that our security is working.
 
@@ -126,14 +122,20 @@ We are now ready to test that our security is working.
 1. Restart sails lift.  If you already have sails lift running, you need to ctrl+c to stop running it and restart it.  Policies do not automatically up themselves as you change the code until sails lift is restarted.
 
 1. For the User routes, if you try to do any call besides a POST, you will get a message that you need to login first
-1. For the Todo routes, if you try to do any call you will get a message that you need to login first
 
-    * Even though we have not created any custom routes all of the standards REST verbs are already wired up
-    
+    ![Not Logged In User Message](images/postman-policy-login.png) 
+
+1. For the Todo routes, if you try to do any call you will get a message that you need to login first.  Even though we have not created any custom routes all of the standards REST verbs are already wired up
+
+    ![Not Logged In User Message](images/postman-policy-login.png) 
+
 1. Once you call the login route you will be able to do the following:
 
-    * For User routes, you will be able to do a GET, PUT, and DELETE call.  
+    * For User routes, you will be able to do call all of the routes except the create new user.  
     * For Todo routes, you will be able to call all routes
-    * If you call the login route again, you will get a message that you need to logout first.
 
+1. After you have logged in, if you try to create a user you will get an error message that you need to logout first. 
+
+    ![Must Logout First Message](images/postman-policy-logout.png)
+    
 <div class="exercise-end"></div>

@@ -1427,13 +1427,11 @@ var user = {
 </code></pre>
 </li>
 <li><p>Within the policy function, we will use the req.session.user to determine if the user has logged in yet or not.  If the user has logged in, we need call next to go to the next policy in the chain.  If the user has not logged in, we will return the forbidden response.</p>
-<pre><code class="lang-javascript"> module.exports = function(req, res, next) {
-     if (req.session.user) {
-         return next();
-     }
-
-     return res.forbidden(&#39;Please Login First.&#39;);
+<pre><code class="lang-javascript"> if (req.session.user) {
+     return next();
  }
+
+ return res.forbidden(&#39;Please Login First.&#39;);
 </code></pre>
 </li>
 </ol>
@@ -1456,13 +1454,11 @@ var user = {
 </code></pre>
 </li>
 <li><p>Within the policy function, we will use the req.session.user to determine if the user has logged in yet or not.  If the user has not logged in, we will call to go to the next policy in the chain. If the user has logged in, we will return the forbidden response.  </p>
-<pre><code class="lang-javascript"> module.exports = function(req, res, next) {
-     if (!req.session.user) {
-         return next();
-     }
-
-     return res.forbidden(&#39;Please Logout First&#39;);
+<pre><code class="lang-javascript"> if (!req.session.user) {
+     return next();
  }
+
+ return res.forbidden(&#39;Please Logout First&#39;);
 </code></pre>
 </li>
 </ol>
@@ -1515,7 +1511,7 @@ var user = {
 <pre><code class="lang-bash"> policies.js
 </code></pre>
 </li>
-<li><p>Add the following to the list of models that are locked down</p>
+<li><p>Within the module.exports.policies, add the following to the list of models that are locked down</p>
 <pre><code class="lang-JavaScript"> UserController: {
      &#39;login&#39;: true,
      &#39;create&#39;: [&#39;isLoggedOut&#39;],
@@ -1529,7 +1525,7 @@ var user = {
 </ol>
 <div class="exercise-end"></div>
 
-<h3 id="testing-out-policy">Testing out policy</h3>
+<h3 id="verify-the-policies-are-working">Verify The Policies Are Working</h3>
 <p>We are now ready to test that our security is working.</p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Testing policy
@@ -1539,18 +1535,19 @@ var user = {
 <li><p>Restart sails lift.  If you already have sails lift running, you need to ctrl+c to stop running it and restart it.  Policies do not automatically up themselves as you change the code until sails lift is restarted.</p>
 </li>
 <li><p>For the User routes, if you try to do any call besides a POST, you will get a message that you need to login first</p>
+<p> <img src="images/postman-policy-login.png" alt="Not Logged In User Message"> </p>
 </li>
-<li><p>For the Todo routes, if you try to do any call you will get a message that you need to login first</p>
-<ul>
-<li>Even though we have not created any custom routes all of the standards REST verbs are already wired up</li>
-</ul>
+<li><p>For the Todo routes, if you try to do any call you will get a message that you need to login first.  Even though we have not created any custom routes all of the standards REST verbs are already wired up</p>
+<p> <img src="images/postman-policy-login.png" alt="Not Logged In User Message"> </p>
 </li>
 <li><p>Once you call the login route you will be able to do the following:</p>
 <ul>
-<li>For User routes, you will be able to do a GET, PUT, and DELETE call.  </li>
+<li>For User routes, you will be able to do call all of the routes except the create new user.  </li>
 <li>For Todo routes, you will be able to call all routes</li>
-<li>If you call the login route again, you will get a message that you need to logout first.</li>
 </ul>
+</li>
+<li><p>After you have logged in, if you try to create a user you will get an error message that you need to logout first. </p>
+<p> <img src="images/postman-policy-logout.png" alt="Must Logout First Message"></p>
 </li>
 </ol>
 <div class="exercise-end"></div>
@@ -1559,194 +1556,410 @@ var user = {
 				<hr>
 				<div class="chapter">
 					<h2 id="routing">Routing</h2>
-<h3 id="controlling-the-api-route-url">Controlling the Api Route Url</h3>
-<p>In the Api project, you can also change how to route to the custom method by setting your own route in the config\routes.js file.  </p>
+<p>As you create your own methods there are times where you want the route to be different from the function name in the controller.  </p>
+<p>For example, in our UserController, we created a userIdentity function but having the route be /user/userIdentity is not very REST like.  Instead it would be better if could change the route to be /user/identity</p>
+<p>All of the routes are configured in the config\routes.js file.  </p>
+<h3 id="change-useridentity-route">Change userIdentity Route</h3>
 <h4 class="exercise-start">
-    <b>Exercise</b>: Create Todo
+    <b>Exercise</b>: Create User Identity Route
 </h4>
 
 <ol>
 <li><p>Open the config/routes.js</p>
+<pre><code class="lang-bash"> routes.js
+</code></pre>
+</li>
+<li><p>Within the module.exports.routes, add the following route that will setup a GET call at /user/identity that maps to the UserController userIdentity function.</p>
 <pre><code class="lang-javascript"> &#39;GET /user/identity&#39;: &#39;UserController.userIdentity&#39;
 </code></pre>
 </li>
-<li><p>For the route to take effect you will need to stop the <code>sails lift</code> with a ctrl+c and then re-run the <code>sails lift</code></p>
-</li>
 </ol>
+<h3 id="verify-route-works">Verify Route Works</h3>
+<ol>
+<li>For the route to take effect you will need to stop the <code>sails lift</code> with a ctrl+c and then re-run the <code>sails lift</code></li>
+<li>Open Postman</li>
+<li>Make a call to the user login API</li>
+<li>Set the verb to be GET (<em>step 1</em>)</li>
+<li><p>Set the url to be <a href="http://localhost:1337/user/identity">http://localhost:1337/user/identity</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/user/identity
+</code></pre>
+</li>
+<li><p>Click the Send button (<em>step 3</em>)</p>
+</li>
+<li>You should now see the user information for the logged in user (<em>step 4</em>) and a status code of 200 (<em>step 5</em>)</li>
+</ol>
+<p><img src="images/postman-route-user-identity.png" alt="User Identity Route Output"></p>
 <div class="exercise-end"></div>
 
 				</div>
 				<hr>
 				<div class="chapter">
 					<h2 id="todo-api-logic">Todo API Logic</h2>
-<h3 id="create-todo">Create Todo</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Create Todo
-</h4>
-
-
-<pre><code class="lang-javascript">create: function createFn(req, res) {
-    var todo = {
-      item: req.param(&#39;item&#39;),
-      completed: req.param(&#39;completed&#39;),
-      user: req.session.user
-    };
-
-    Todo.create(todo, function (err, results) {
-      if (err) res.serverError(err);
-      return res.ok(results);
-    });
-},
-</code></pre>
-<ol>
-<li>Todo.js</li>
-</ol>
-<pre><code class="lang-javascript">item: {
-    required: &#39;true&#39;,
-    type: &#39;string&#39;
-},
-completed: {
-    required: &#39;true&#39;,
-    type: &#39;boolean&#39;,
-    defaultsTo: &#39;false&#39;
-},
-</code></pre>
-<div class="exercise-end"></div>
-
-<h3 id="get-todo-list">Get Todo List</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Get Todo List
-</h4>
-
-<pre><code class="lang-javascript">find: function findFn(req, res) {
-    Todo.find(
-        { 
-            user: req.session.user 
-        }
-    )
-    .populate(&#39;user&#39;)
-    .exec(function (err, results) {
-        if (err) return res.serverError(err);
-        if (results.length === 0) return res.notFound();
-
-        return res.ok(results);
-    });
-},
-</code></pre>
-<div class="exercise-end"></div>
-
-<h3 id="get-single-todo">Get Single Todo</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Find Single Todo Item
-</h4>
-
-<pre><code class="lang-javascript">findOne: function findOneFn(req, res) {
-    Todo.findOne(
-        { 
-            user: req.session.user 
-        }
-    )
-    .populate(&#39;user&#39;)
-    .exec(function (err, result) {
-        if (err) return res.serverError(err);
-        if (!result) return res.notFound();
-
-        return res.ok(result);
-    });
-}
-</code></pre>
-<div class="exercise-end"></div>
-
-<h3 id="update-todo">Update Todo</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Update Single Todo
-</h4>
-
-<pre><code class="lang-javascript">update: function (req, res) {
-    Todo.findOne(
-        { 
-            user: req.session.user, 
-            id: req.param(&#39;id&#39;) 
-        }, 
-        function (err, found) {
-            found.item = req.param(&#39;item&#39;);
-            found.completed = req.param(&#39;completed&#39;);
-
-            Todo.update(
-                {
-                    user: req.session.user,
-                    id: req.param(&#39;id&#39;)
-                }, 
-                found,
-                function (err, results) {
-                    if (err) res.serverError(err);
-                    return res.ok(results);
-                }
-            );
-        }
-    );
-},
-</code></pre>
-<div class="exercise-end"></div>
-
-<h3 id="delete-todo">Delete Todo</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Delete Single Todo
-</h4>
-
-<pre><code class="lang-javascript">delete: function (req, res) {
-    Todo.delete(
-        { 
-            user: req.session.user, 
-            id: req.param(&#39;id&#39;),
-        }, 
-        function (err, results) {
-            if (err) res.serverError(err);
-            return res.ok(results);
-        }
-    );
-},
-</code></pre>
-<div class="exercise-end"></div>
-
-<h3 id="find-only-not-completed-todo">Find Only Not Completed Todo</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Create Method to Return Only Open
-</h4>
-
-<pre><code class="lang-javascript">findOnlyOpen: function findOnlyOpenFn(req, res) {
-    Todo.find({
-        user: req.session.user,
-        completed: false,
-    })
-    .populate(&#39;user&#39;)
-    .exec(function (err, results) {
-        if (err) return res.serverError(err);
-        if (results.length === 0) return res.notFound();
-
-        return res.ok(results);
-    });
-},
-</code></pre>
-<div class="exercise-end"></div>
-
+<p>So far we have not done anything with the Todo API.  That is about to change though.  We are going to add the following functionality to the Todo API.</p>
+<ul>
+<li>Associate a Todo record to a User Record in a 1:Many setting (e.g. a User will have many Todo records and a Todo Record will have 1 user)</li>
+<li>Get the associated user from the req.session.user </li>
+<li>Set completed for a new record to false by default</li>
+<li>Make sure that for viewing, updating and deleting the a user can only affect their records</li>
+</ul>
 <h3 id="associating-user-to-todo-items">Associating User to Todo Items</h3>
+<p>We could just put the User id into the Todo record but that would not actually associate the data.  By creating an actual association we will be able to also include the associated user record with the Todo recrod.</p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Associate Models
 </h4>
 
 <ol>
-<li><p>Todo.js</p>
+<li><p>Open api\models\Todo.js</p>
+<pre><code class="lang-bash"> todo.js
+</code></pre>
+</li>
+<li><p>In the attributes section add the following attribute to create a field that has an association to the User model.</p>
 <pre><code class="lang-javascript"> user: {
    model: &#39;user&#39;
  }
 </code></pre>
 </li>
-<li><p>User.js</p>
+<li><p>Save the file</p>
+</li>
+</ol>
+<p>We are now going to add the reverse associate so that the user model can get a list of associated Todo records. </p>
+<ol>
+<li><p>Open api\models\User.js</p>
+<pre><code class="lang-bash"> User.js
+</code></pre>
+</li>
+<li><p>To the attributes section, we need to add the following field that says it will be a collection of Todo records and associated through the User field that we created in the previous steps.</p>
 <pre><code class="lang-javascript"> todoItems: {
    collection: &#39;todo&#39;,
    via: &#39;user&#39;
  },
+</code></pre>
+</li>
+<li><p>Save the file</p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="create-todo">Create Todo</h3>
+<p>We are now going to setup the ability to create Todo items that gets the user for the res.session.user and sets completed to false by default.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Setup Model Field Attributes
+</h4>
+
+<ol>
+<li><p>Open api\models\Todo.js</p>
+<pre><code class="lang-bash"> todo.js
+</code></pre>
+</li>
+<li><p>In the attributes we need to add the completed field.  We are going to make the field required, of type boolean, and defaults to false.</p>
+<pre><code class="lang-javascript">completed: {
+    required: &#39;true&#39;,
+    type: &#39;boolean&#39;,
+    defaultsTo: &#39;false&#39;
+},
+</code></pre>
+</li>
+</ol>
+<p>While we are defining fields, lets go ahead and define our item field that will hold the text for our todo item.  The item field will be required and of type string.</p>
+<p>In the attributes for the Todo model, add the item field below</p>
+<pre><code class="lang-javascript">item: {
+    required: &#39;true&#39;,
+    type: &#39;string&#39;
+},
+</code></pre>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create Todo
+</h4>
+
+<p>Now that we have our fields defined, we are ready to override the POST verb with out own logic.  We wil get the item text from the body of the request and the user from the req.session.user.  We do not need to include the completed field since it will automatically default to true.</p>
+<ol>
+<li><p>Open api/controllers/TodoController.js</p>
+<pre><code class="lang-bash"> TodoController.js
+</code></pre>
+</li>
+<li><p>Add our create method stub to the module.exports</p>
+<pre><code class="lang-javascript"> create: function createFn(req, res){
+
+ }
+</code></pre>
+</li>
+<li><p>Within the create function, we need to create a variable to hold the todo object we will be creating with the item and user fields populated.  The item field we will get from the request params collection and the user field from req.session.user.</p>
+<pre><code class="lang-javascript"> var todo = {
+     item: req.param(&#39;item&#39;),
+     user: req.session.user
+ };
+</code></pre>
+</li>
+<li><p>Next we need to call the Todo model&#39;s create function and pass in the todo object we just created.  Then we will run our standard callback error check and return statement</p>
+<pre><code class="lang-javascript"> Todo.create(todo, function (err, results) {
+     if (err) res.serverError(err);
+
+     return res.ok(results);
+ });
+</code></pre>
+</li>
+<li><p>Save the TodoController.js file</p>
+</li>
+</ol>
+<h4 id="verify-todo-create">Verify Todo Create</h4>
+<ol>
+<li>Restart sails for the changes to take effect</li>
+<li>Open Postman</li>
+<li>Make a call to the user login API</li>
+<li>Set the REST verb to POST (<em>step 1</em>)</li>
+<li><p>Set the URL to <a href="http://localhost:1337/todo">http://localhost:1337/todo</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/todo
+</code></pre>
+</li>
+<li><p>Click on the Body tab (<em>step 3</em>)</p>
+</li>
+<li>Select Raw (<em>step 4</em>)</li>
+<li>Set the type to JSON (application/json) (<em>step 5</em>)</li>
+<li><p>Set the body of the request to the following to pass in the email and password fields.  Change the email and password values as needed for the user that you created earlier with the sign up function (<em>step 6</em>)</p>
+<pre><code class="lang-javascript"> {
+     &quot;item&quot;: &quot;Coding with @digitaldrummerj and SailsJS&quot;
+ }
+</code></pre>
+</li>
+<li><p>Click the Send button (<em>step 7</em>)</p>
+</li>
+<li><p>If everything worked a new todo record was created and was returned back to you (<em>step 8</em>) with a 200 status code (<em>step 9</em>).</p>
+<p> <img src="images/postman-todo-create.png" alt="create response"></p>
+</li>
+<li><p>You can verify that the create actually did work by running a GET against <a href="http://localhost:1337/todo">http://localhost:1337/todo</a></p>
+<pre><code class="lang-bash"> http://localhost:1337/todo
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="get-todo-list">Get Todo List</h3>
+<p>Next we want to be able to get back the Todo records that belong to us.  Right now we can pull all of the Todo records even if we do not own them.  To fix this issue, we are going to override the find function to filter it by the user field. </p>
+<div class="alert alert-danger" role="alert"><strong>Note:</strong> That once we override the find function it will no longer by default return the associated user records.  Instead if will just returned the user Id value.  To fix this you have to make a call to populate and tell it which association to populate.</div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Get Todo List
+</h4> 
+
+<ol>
+<li><p>Open api\controllers\TodoController.js</p>
+<pre><code class="lang-bash"> TodoController.js
+</code></pre>
+</li>
+<li><p>Within the module.exports, add the following function.  This function is just like we did for the override of the find function in the UserController with the addition of the populate users call.</p>
+<pre><code class="lang-javascript"> find: function findFn(req, res) {
+     Todo.find(
+         { 
+             user: req.session.user 
+         }
+     )
+     .populate(&#39;user&#39;)
+     .exec(function (err, results) {
+         if (err) return res.serverError(err);
+         if (results.length === 0) return res.notFound();
+
+         return res.ok(results);
+     });
+ },
+</code></pre>
+</li>
+<li><p>Save the TodoController.js</p>
+</li>
+</ol>
+<h4 id="verify-the-find-function">Verify the Find Function</h4>
+<ol>
+<li>You must restart sails lift for the changes to take effect</li>
+<li>Open Postman</li>
+<li>Make sure to call the login API</li>
+<li>Open another tab in Postman </li>
+<li>Set the verb to GET (<em>step 1</em>)</li>
+<li><p>Set the url to <a href="http://localhost:1337/todo">http://localhost:1337/todo</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/todo
+</code></pre>
+</li>
+<li><p>Click the Send Button (<em>step 3</em>)</p>
+</li>
+<li>You should only see your user information returned (<em>step 4</em>) with a 200 status code (<em>step 5</em>)</li>
+</ol>
+<p><img src="images/postman-todo-find.png" alt="Postman Find Override"></p>
+<div class="exercise-end"></div>
+
+<h3 id="get-single-todo">Get Single Todo</h3>
+<p>Just like with the find all, we can also see any individual todo record regardless if we own it or not.  To fix this we need to override the findOne function.  </p>
+<div class="alert alert-danger" role="alert"><strong>Note:</strong> Just like the find function, the automatic population of associations goes away when we override the find function.  To fix this you have to make a call to populate and tell it which association to populate.</div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Find Single Todo Item
+</h4>
+
+<ol>
+<li><p>Open api\controllers\TodoController.js</p>
+<pre><code class="lang-bash"> TodoController.js
+</code></pre>
+</li>
+<li><p>Add the following function to override the findOne function to make sure that we own the record, populate the user association, and then run our standard error trap/return statement.</p>
+<pre><code class="lang-javascript"> findOne: function findOneFn(req, res) {
+     Todo.findOne(
+         { 
+             user: req.session.user 
+         }
+     )
+     .populate(&#39;user&#39;)
+     .exec(function (err, result) {
+         if (err) return res.serverError(err);
+         if (!result) return res.notFound();
+
+         return res.ok(result);
+     });
+ }
+</code></pre>
+</li>
+<li><p>Save the file</p>
+</li>
+</ol>
+<h4 id="verify-the-find-one-function">Verify the Find One Function</h4>
+<ol>
+<li>You must restart sails lift for the changes to take effect</li>
+<li>Open Postman</li>
+<li>Make sure to call the login API</li>
+<li>Open another tab in Postman </li>
+<li>Set the verb to GET (<em>step 1</em>)</li>
+<li><p>Set the url to <a href="http://localhost:1337/todo/1">http://localhost:1337/todo/1</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/todo/1
+</code></pre>
+ <div class="alert alert-info">The 1 at the end of the url is the Id (primary key) value of the Todo record that we want to pull.  If the Id field for the Todo record you created is not 1, then change the value in the url.</div>
+</li>
+<li><p>Click the Send Button (<em>step 3</em>)</p>
+</li>
+<li>You should only see your user information returned (<em>step 4</em>) with a 200 status code (<em>step 5</em>)</li>
+</ol>
+<p><img src="images/postman-todo-findone.png" alt="Postman Find One Override"></p>
+<div class="exercise-end"></div>
+
+<h3 id="update-todo">Update Todo</h3>
+<p>A Todo API wouldn&#39;t be complete without the ability to mark off the you completed an item.  However, we need to ensure that the user actually owns the record before we update it.  Up to this point, we have only used 1 parameter in our Waterline calls.  For the Update statement, we are going to use 2 parameters:  todo record id and the user value from req.session.user.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Update Single Todo
+</h4>
+
+<ol>
+<li><p>Open api\controllers\TodoController.js</p>
+<pre><code class="lang-bash"> TodoController.js
+</code></pre>
+</li>
+<li><p>Add the following function stub to the module.exports</p>
+<pre><code class="lang-javascript"> update: function (req, res) {
+
+ },
+</code></pre>
+</li>
+<li><p>Within the update function, create a variable called record that will hold the values that we plan on updating.</p>
+<pre><code class="lang-javascript"> var record = {
+     id: req.param(&#39;id&#39;),
+     completed: req.param(&#39;completed&#39;),
+     user: req.session.user
+ };
+</code></pre>
+</li>
+<li><p>Then we need to make a call to the Waterline update function on the Todo object and then run our normal error check and return statements.   If we do not get a record back, then we will assume that we don&#39;t own the record and return a not found error.</p>
+<pre><code class="lang-javascript"> Todo.update(
+     {
+         user: req.session.user,
+         id: req.param(&#39;id&#39;)
+     }, 
+     record,
+     function (err, results) {
+         if (err) res.serverError(err);
+         if (results.length === 0) return res.notFound();
+
+         return res.ok(results);
+     }
+ );
+</code></pre>
+</li>
+</ol>
+<div class="alert alert-warning"><strong>Note:</strong> The update statement returns back an array of records even though we are updating just one record.  Hence the length check in the callback function to make sure we have records</div>
+
+<h4 id="verify-update-function">Verify Update Function</h4>
+<ol>
+<li>Restart sails for the changes to take effect</li>
+<li>Open Postman</li>
+<li>Make a call to the user login API</li>
+<li>Set the REST verb to POST (<em>step 1</em>)</li>
+<li><p>Set the URL to <a href="http://localhost:1337/todo/1">http://localhost:1337/todo/1</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/todo/1
+</code></pre>
+</li>
+<li><p>Click on the Body tab (<em>step 3</em>)</p>
+</li>
+<li>Select Raw (<em>step 4</em>)</li>
+<li>Set the type to JSON (application/json) (<em>step 5</em>)</li>
+<li><p>Set the body of the request to the following to pass in the email and password fields.  Change the email and password values as needed for the user that you created earlier with the sign up function (<em>step 6</em>)</p>
+<pre><code class="lang-javascript"> {
+     &quot;item&quot;: &quot;Verify Coding with @digitaldrummerj and SailsJS&quot;,
+     &quot;completed&quot;: true
+ }
+</code></pre>
+</li>
+<li><p>Click the Send button (<em>step 7</em>)</p>
+</li>
+<li><p>If everything worked a new todo record was created and was returned back to you (<em>step 8</em>) with a 200 status code (<em>step 9</em>).</p>
+<p> <img src="images/postman-todo-update.png" alt="update response"></p>
+</li>
+<li><p>You can verify that the update actually did work by running a GET against <a href="http://localhost:1337/todo">http://localhost:1337/todo</a></p>
+<pre><code class="lang-bash"> http://localhost:1337/todo
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="delete-todo">Delete Todo</h3>
+<p>The last major thing we need to do it to override the delete function to make sure we can only delete record that we own.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Delete Single Todo
+</h4>
+
+<ol>
+<li><p>Open api\controllers\TodoController.js</p>
+<pre><code class="lang-bash"> TodoController.js
+</code></pre>
+</li>
+<li><p>The delete function is like the other function that we have been overriding.  We are going to take in the Id of the record to delete, make sure we own it and then run our standard error/response check.</p>
+<pre><code class="lang-javascript"> delete: function (req, res) {
+     Todo.delete(
+         { 
+             user: req.session.user, 
+             id: req.param(&#39;id&#39;),
+         }, 
+         function (err, results) {
+             if (err) res.serverError(err);
+             if (!results) return res.notFound();
+             return res.ok(results);
+         }
+     );
+ },
+</code></pre>
+</li>
+</ol>
+<h4 id="verify-delete-function">Verify Delete Function</h4>
+<ol>
+<li>Restart sails for the changes to take effect</li>
+<li>Open Postman</li>
+<li>Make a call to the user login API</li>
+<li>Set the REST verb to POST (<em>step 1</em>)</li>
+<li><p>Set the URL to <a href="http://localhost:1337/todo/1">http://localhost:1337/todo/1</a> (<em>step 2</em>)</p>
+<pre><code class="lang-bash"> http://localhost:1337/todo/1
+</code></pre>
+</li>
+<li><p>Click the Send button (<em>step 3</em>)</p>
+</li>
+<li><p>If everything worked a new todo record was created and was returned back to you (<em>step 4</em>) with a 200 status code (<em>step 5</em>).</p>
+<p> <img src="images/postman-todo-delete.png" alt="delete response"></p>
+</li>
+<li><p>You can verify that the delete actually did work by running a GET against <a href="http://localhost:1337/todo">http://localhost:1337/todo</a></p>
+<pre><code class="lang-bash"> http://localhost:1337/todo
 </code></pre>
 </li>
 </ol>
@@ -1762,11 +1975,59 @@ completed: {
 				<hr>
 				<div class="chapter">
 					<h2 id="cors-configuration">CORS Configuration</h2>
+<p>Before we can use our API against a UI or allow others to call the API we need to configure CORS.</p>
+<p>CORS allows us to configure which routes, domains, if cookies are passed in, which REST verbs are allowed, and what header values are allowed.  </p>
 <h4 class="exercise-start">
     <b>Exercise</b>: CORS Config
 </h4>
 
-<pre><code class="lang-javascript">
+
+<pre><code class="lang-javascript">  /***************************************************************************
+  *                                                                          *
+  * Allow CORS on all routes by default? If not, you must enable CORS on a   *
+  * per-route basis by either adding a &quot;cors&quot; configuration object to the    *
+  * route config, or setting &quot;cors:true&quot; in the route config to use the      *
+  * default settings below.                                                  *
+  *                                                                          *
+  ***************************************************************************/
+
+  // allRoutes: false,
+
+  /***************************************************************************
+  *                                                                          *
+  * Which domains which are allowed CORS access? This can be a               *
+  * comma-delimited list of hosts (beginning with http:// or https://) or    *
+  * &quot;*&quot; to allow all domains CORS access.                                    *
+  *                                                                          *
+  ***************************************************************************/
+
+  // origin: &#39;*&#39;,
+
+  /***************************************************************************
+  *                                                                          *
+  * Allow cookies to be shared for CORS requests?                            *
+  *                                                                          *
+  ***************************************************************************/
+
+  // credentials: true,
+
+  /***************************************************************************
+  *                                                                          *
+  * Which methods should be allowed for CORS requests? This is only used in  *
+  * response to preflight requests (see article linked above for more info)  *
+  *                                                                          *
+  ***************************************************************************/
+
+  // methods: &#39;GET, POST, PUT, DELETE, OPTIONS, HEAD&#39;,
+
+  /***************************************************************************
+  *                                                                          *
+  * Which headers should be allowed for CORS requests? This is only used in  *
+  * response to preflight requests.                                          *
+  *                                                                          *
+  ***************************************************************************/
+
+  // headers: &#39;content-type&#39;
 </code></pre>
 <div class="exercise-end"></div>
 
