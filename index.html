@@ -382,8 +382,25 @@
 
 <h3 id="running-api">Running Api</h3>
 <h4 class="exercise-start">
+    <b>Exercise</b>: Turning Off Views
+</h4>
+
+<p>Even though we generated our project without any views, you will see an error when you run the project for the first time related to the views.  To fix this error, we need to set the views to false in the .sailsrc file.</p>
+<ol>
+<li>Open .sailsrc</li>
+<li><p>To the hooks section, add the following name/value pair.  Make sure to add a comma after the <code>&quot;grunt&quot;: false</code></p>
+<pre><code class="lang-javascript"> &quot;views&quot;: false
+</code></pre>
+</li>
+<li><p>Save the file</p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
     <b>Exercise</b>: Starting Api
 </h4>
+
 
 <ol>
 <li><p>In the Visual Studio Code integrated  terminal run the following command to start our API</p>
@@ -1968,8 +1985,74 @@ var user = {
 				</div>
 				<hr>
 				<div class="chapter">
-					<h2 id="connecting-to-mongodb">Connecting to MongoDB</h2>
-<p>Coming soon...</p>
+					<h2 id="deploying">Deploying</h2>
+<h3 id="preparing-for-production">Preparing for Production</h3>
+<p><a href="http://sailsjs.com/documentation/concepts/deployment">http://sailsjs.com/documentation/concepts/deployment</a></p>
+<h3 id="deploy-to-heroku">Deploy to Heroku</h3>
+<p>Prerequisites:</p>
+<ul>
+<li><a href="http://git-scm.com/">Git</a></li>
+<li><a href="https://signup.heroku.com/login">Heroku account</a></li>
+<li><a href="https://toolbelt.heroku.com/">Heroku Toolbelt installed</a> (CLI tool for creating and managing Heroku apps)</li>
+</ul>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create Heroku App
+</h4>
+
+<ol>
+<li>Stop sails lift</li>
+<li>Open a command prompt or Windows terminal outside of Visual Studio Code</li>
+<li>Navigate to our Sails app</li>
+<li><p>Login to your Heroku account</p>
+<pre><code class="lang-bash"> heroku login
+</code></pre>
+<p> <div class="alert alert-warning">If heroku can&#39;t be found, you will need to hit the trash in the upper right of your integrated shell and then open the integrated terminal up again<div></p>
+</li>
+<li><p>Create a new heroku app</p>
+<pre><code class="lang-bash"> heroku create your-app-name
+</code></pre>
+</li>
+<li><p>Next we need to create a ProcFile in the root of our project to tell Heroku how to run our Sails app</p>
+<pre><code class="lang-bash"> Procfile
+</code></pre>
+</li>
+<li><p>In the Procfile, add the following line</p>
+<pre><code class="lang-bash"> web: node app.js
+</code></pre>
+</li>
+<li><p>We need create a Git repository for our Sails ap</p>
+<pre><code class="lang-bash"> git init
+</code></pre>
+</li>
+<li><p>We are going to use Git on Heroku to do a deploy to Heroku</p>
+<pre><code class="lang-bash"> heroku git:remote -a your-app-name
+</code></pre>
+</li>
+<li><p>Add the Procfile to Git</p>
+<pre><code class="lang-bash"> git add .
+</code></pre>
+</li>
+<li><p>Now we need to commit the Procfile</p>
+<pre><code class="lang-bash"> git commit -m &quot;Add Procfile&quot;
+</code></pre>
+</li>
+<li><p>We need to push to heroku</p>
+<pre><code class="lang-bash"> git push heroku master
+</code></pre>
+</li>
+<li><p>It will take a bit to deploy and install the dependencies on Heroku.  Once the deploy is completed, you will be able to view your application at <a href="https://your-app-name-heroku.herokuapp.com">https://your-app-name-heroku.herokuapp.com</a></p>
+</li>
+</ol>
+<p>Anytime you need to redeploy the app run</p>
+<pre><code class="lang-bash">git add .
+git commit -m &quot;new changes&quot;
+git push heroku master
+</code></pre>
+<div class="exercise-end"></div>
+
+<h3 id="deploy-to-azure">Deploy to Azure</h3>
+<p>Microsoft has a great article on their Docs site at [<a href="https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails">https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails</a>]
+(<a href="https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails">https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails</a>)</p>
 
 				</div>
 				<hr>
@@ -1977,71 +2060,280 @@ var user = {
 					<h2 id="cors-configuration">CORS Configuration</h2>
 <p>Before we can use our API against a UI or allow others to call the API we need to configure CORS.</p>
 <p>CORS allows us to configure which routes, domains, if cookies are passed in, which REST verbs are allowed, and what header values are allowed.  </p>
+<p>Without configuring, no one would be able to make calls to our API.</p>
+<h3 id="cors-routes">CORS Routes</h3>
 <h4 class="exercise-start">
-    <b>Exercise</b>: CORS Config
+    <b>Exercise</b>: Routes
 </h4>
 
-
-<pre><code class="lang-javascript">  /***************************************************************************
-  *                                                                          *
-  * Allow CORS on all routes by default? If not, you must enable CORS on a   *
-  * per-route basis by either adding a &quot;cors&quot; configuration object to the    *
-  * route config, or setting &quot;cors:true&quot; in the route config to use the      *
-  * default settings below.                                                  *
-  *                                                                          *
-  ***************************************************************************/
-
-  // allRoutes: false,
-
-  /***************************************************************************
-  *                                                                          *
-  * Which domains which are allowed CORS access? This can be a               *
-  * comma-delimited list of hosts (beginning with http:// or https://) or    *
-  * &quot;*&quot; to allow all domains CORS access.                                    *
-  *                                                                          *
-  ***************************************************************************/
-
-  // origin: &#39;*&#39;,
-
-  /***************************************************************************
-  *                                                                          *
-  * Allow cookies to be shared for CORS requests?                            *
-  *                                                                          *
-  ***************************************************************************/
-
-  // credentials: true,
-
-  /***************************************************************************
-  *                                                                          *
-  * Which methods should be allowed for CORS requests? This is only used in  *
-  * response to preflight requests (see article linked above for more info)  *
-  *                                                                          *
-  ***************************************************************************/
-
-  // methods: &#39;GET, POST, PUT, DELETE, OPTIONS, HEAD&#39;,
-
-  /***************************************************************************
-  *                                                                          *
-  * Which headers should be allowed for CORS requests? This is only used in  *
-  * response to preflight requests.                                          *
-  *                                                                          *
-  ***************************************************************************/
-
-  // headers: &#39;content-type&#39;
+<p>The 1st configuration is the routes that are allowed configuration.  You do not have to allow all Routes and can configure CORS on a per Route basis if you would like.  If I am doing an API that is meant to be called by anyone, I typically set allRoutes to true.</p>
+<p>For the purpose of this tutorial, we are going to set it to allow all routes.</p>
+<ol>
+<li><p>Open config\cors.js</p>
+<pre><code class="lang-bash"> cors.js
 </code></pre>
+</li>
+<li><p>Find the commented out allRoutes, uncomment it and set it to true</p>
+<pre><code class="lang-javascript"> allRoutes: true,
+</code></pre>
+</li>
+<li><p>Save the file</p>
+</li>
+</ol>
 <div class="exercise-end"></div>
+
+<h3 id="cors-urls-to-allow">CORS URLS to Allow</h3>
+<p>You need to specify which URLs are allowed make calls to our API.  It is a comma delimited list of host names beginning with either http:// or https://.  You can also use * to say to allow all domains.  </p>
+<p>For the purpose of this tutorial, we are going to allow all domains to make API calls.  This means that any could make a Todo UI and use our API as the backend.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Urls to Allow
+</h4>
+
+<ol>
+<li><p>Still within the config\cors.js</p>
+<pre><code class="lang-bash"> cors.js
+</code></pre>
+</li>
+</ol>
+<ol>
+<li><p>Find the comment our origin and uncomment it.  </p>
+<pre><code class="lang-javascript"> origin: &#39;*&#39;,
+</code></pre>
+</li>
+<li><p>Save the file</p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="cors-cookie-sharing">CORS Cookie Sharing</h3>
+<p>The ability to share cookies with the API is very important when dealing with in-memory Sails sessions.  By default Sails uses in-memory sessions and sends a cookie with the session hash to the client.  If the client does not send the cookie back with each request then Sails treats the session as a new session which means that for our API, the user would never be treated as being logged in.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Allow Cookies
+</h4>
+
+<ol>
+<li><p>Within config\cors.js</p>
+<pre><code class="lang-bash"> cors.js
+</code></pre>
+</li>
+<li><p>Find the commented out credentials and uncomment it</p>
+<pre><code class="lang-javascript"> credentials
+</code></pre>
+</li>
+<li><p>Save the file</p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="cors-allowed-rest-verbs">CORS Allowed REST verbs</h3>
+<p>As part of the CORS pre-flight checks, it determines if the REST verb is allowed or not.  We are going to define that all REST verbs, options and head are allowed. </p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: REST Verbs Allowed
+</h4>
+
+<ol>
+<li><p>Within config\cors.js</p>
+<pre><code class="lang-bash"> cors.js
+</code></pre>
+</li>
+<li><p>Find the methods list that is commented out and uncomment it.</p>
+<pre><code class="lang-javascript"> methods: &#39;GET, POST, PUT, DELETE, OPTIONS, HEAD&#39;,
+</code></pre>
+</li>
+<li><p>Save the file</p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="cors-headers">CORS Headers</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Headers
+</h4>
+
+<ol>
+<li><p>Within the config\cors.js</p>
+<pre><code class="lang-bash"> cors.js
+</code></pre>
+</li>
+<li><p>Find the commented out headers and uncomment it</p>
+<pre><code class="lang-javascript"> headers: &#39;content-type&#39;
+</code></pre>
+</li>
+<li><p>Save the file</p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="verifying-cors">Verifying CORS</h3>
+<p>Before when you tried to query the API, you got a PreFlight error.  Now if you try to query the API, you will be able to see any machine can query the API.  </p>
 
 				</div>
 				<hr>
 				<div class="chapter">
-					<h2 id="deploying">Deploying</h2>
-<h3 id="deploy-to-heroku">Deploy to Heroku</h3>
-<p>Coming soon...</p>
-<h3 id="deploy-to-azure">Deploy to Azure</h3>
-<p>Coming soon...</p>
+					<h2 id="connecting-to-a-data-store">Connecting to A Data Store</h2>
+<p>In production, you will want to connect to a real data store instead of the default JSON file data store.</p>
+<p>Sails has more than 30 data stores connectors available.</p>
+<p>All of the connections are stored in config/connection.js and the default connection to use is stored in config/models.js</p>
+<h3 id="assumptions">Assumptions</h3>
+<p>It is assume that you already have a database created.  If you do not have a database, you can create a free MongoDb and Postgres on Heroku or a free MySQL database on Azure.</p>
+<h3 id="mongo">Mongo</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Mongo Db
+</h4>
 
+<ol>
+<li>Open integrated terminal</li>
+<li><p>Run the following npm install command</p>
+<pre><code class="lang-bash"> npm install sails-mongo --save
+</code></pre>
+</li>
+<li><p>Open config\connections.js</p>
+<pre><code class="lang-bash"> connections.js
+</code></pre>
+</li>
+<li><p>Find the mongo db section</p>
+</li>
+<li>Uncomment the someMongodbServer connection </li>
+<li>Change the name from someMongodbServer to something more useful to you</li>
+<li>Update the host, port, user, password, and database for your Mongo database</li>
+<li>Save the file</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="mysql">MySQL</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: MySQL
+</h4>
+
+<ol>
+<li>Open integrated terminal</li>
+<li><p>Run the following npm install command</p>
+<pre><code class="lang-bash"> npm install sails-mysql --save
+</code></pre>
+</li>
+</ol>
+<ol>
+<li><p>Open config\connections.js</p>
+<pre><code class="lang-bash"> connections.js
+</code></pre>
+</li>
+<li><p>Find the MySQL section</p>
+</li>
+<li>Uncomment the someMysqlServer connection </li>
+<li>Change the name from someMysqlServer to something more useful to you</li>
+<li>Update the host, user, password, and database for your MySQL database</li>
+<li>Save the file</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="postgres">Postgres</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Postgres
+</h4>
+
+<ol>
+<li>Open integrated terminal</li>
+<li><p>Run the following npm install command</p>
+<pre><code class="lang-bash"> npm install sails-postgresql --save
+</code></pre>
+</li>
+<li><p>Open config\connections.js</p>
+<pre><code class="lang-bash"> connections.js
+</code></pre>
+</li>
+<li><p>Find the Postgres section</p>
+</li>
+<li>Uncomment the somePostgresqlServer connection </li>
+<li>Change the name from somePostgresqlServer to something more useful to you</li>
+<li>Update the host, user, password, and database for your Postgres database</li>
+<li>Save the file</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="configure-models-to-use-connection">Configure Models to Use Connection</h3>
+<p>You have 2 options for configuring the data store connection that models use:</p>
+<ol>
+<li>Global configuration in config\models.js</li>
+<li>Configuration in each model</li>
+</ol>
+<p>Since we are only using 1 data store for this tutorial, we are going to go with option 1 and create a global configuration.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Configure Model Connection
+</h4>
+
+<ol>
+<li><p>Open config\models.js</p>
+<pre><code class="lang-bash"> models.js
+</code></pre>
+</li>
+<li><p>Uncomment the connection on line 20 </p>
+</li>
+<li>Change the value of the connection to the name of the connection that you want to use from the connections.js file</li>
+<li>Save the file</li>
+<li>Restart sails lift and it will connect to your data store.  The first time will be slower as it migrates your models (e.g. creates tables and columns)</li>
+</ol>
+<div class="alert alert-warning" role="alert"><strong>Warning</strong>: If you connect to your data store for the first time with the NODE_ENV set to production or run sails lift with the --prod flag, the migrate configuration will automatically be set to safe and your models will not be created in the data store.  To workaround this, you can connect to your data store from your local machine to get the models migrated.  Just becareful doing this since it could potentially impact data and/or performance during the migrate operation</div>
+
+<div class="exercise-end"></div>
 				</div>
 				<hr>
+				<div class="chapter">
+					<h2 id="hooking-up-a-ui">Hooking Up a UI</h2>
+<p>As part of my <a href="http://digitaldrummerj.me/angular-tutorial">Angular Workshop</a>, you build a Todo UI that utilizes the Sails Api that we just built.  The completed code for the UI is available at [<a href="https://github.com/digitaldrummerj/angular-tutorial-code">https://github.com/digitaldrummerj/angular-tutorial-code</a>].</p>
+<h3 id="getting-the-code">Getting the Code</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Getting the Code
+</h4>
+
+<ol>
+<li>Download the Zip file for the completed code</li>
+<li>Unzip the download zip file </li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="using-the-code">Using the Code</h3>
+<p>You need to install the Angular CLI in order to use the code.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Angular CLI Install
+</h4>
+
+<div class="alert alert-info" role="alert">If you already have the latest Angular CLI installed, you can skip this step</div>
+
+<ol>
+<li>Open a command prompt or terminal</li>
+<li><p>Run the following npm command</p>
+<pre><code class="lang-bash"> npm install -g @angular/cli
+</code></pre>
+ <div class="alert alert-warning" role="alert"><strong>Warning</strong>: If you are on a Mac, you may need to run <code>sudo npm install -g @angular/cli</code></div>
+</li>
+<li><p>Navigate to the directory you unzipped the code into and go into the Angular project directory</p>
+</li>
+<li><p>Install the npm dependencies</p>
+<pre><code class="lang-bash"> npm install
+</code></pre>
+</li>
+<li><p>Open the directory for the Angular code in Visual Studio Code</p>
+</li>
+<li><p>Open the src/environments/environment.ts file</p>
+<pre><code class="lang-bash"> environment.ts
+</code></pre>
+</li>
+<li><p>Change the API base url to your Sails url.  Either your locally running instance or your deployed instance.</p>
+</li>
+<li>Save the file</li>
+<li><p>Start the Angular web server</p>
+<pre><code class="lang-bash"> ng serve
+</code></pre>
+</li>
+<li><p>Navigate to <a href="http://localhost:4200">http://localhost:4200</a> to view the UI</p>
+</li>
+<li>You can now login to the account that you created using Postman or create a new account.</li>
+<li>Once you create/login, you will be able to see your todo list on the home page</li>
+<li>On the home page, you can add new Todo items, completed an item or delete an item.</li>
+</ol>
+
+				</div>
+				<!--<hr>
 				<div class="chapter">
 					<h2 id="unit-testing">Unit Testing</h2>
 <p>Coming soon.....</p>
@@ -2052,11 +2344,13 @@ var user = {
 					<h2 id="linting">Linting</h2>
 <p>Coming soon...</p>
 
-				</div>
+				</div>-->
 				<hr>
 				<div class="chapter">
 					<h2 id="thank-you">Thank you</h2>
-<p>I hope that you enjoyed going through this tutorial.    You now have everything that you need to start developing your own Sails based API.  </p>
+<p>You now have everything that you need to start developing your own Sails based API and deploy it to a production environment.</p>
+<p>Thank you for going through this tutorial.</p>
+<p>You can follow me on twitter at <a href="https://twitter.com/digitaldrummerj">@digitaldrummerj</a> and on my blog at <a href="http://digitaldrummerj.me/">digitaldrummerj.me</a>.</p>
 
 				</div>
 			</div>

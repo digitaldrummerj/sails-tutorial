@@ -48,8 +48,26 @@ Out of the box, Sails wires up all of the REST verbs (GET, POST, PUT, DELETE) fo
 ### Running Api
 
 <h4 class="exercise-start">
+    <b>Exercise</b>: Turning Off Views
+</h4>
+
+Even though we generated our project without any views, you will see an error when you run the project for the first time related to the views.  To fix this error, we need to set the views to false in the .sailsrc file.
+
+1. Open .sailsrc
+1. To the hooks section, add the following name/value pair.  Make sure to add a comma after the `"grunt": false`
+
+    ```javascript
+    "views": false
+    ```
+
+1. Save the file
+
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
     <b>Exercise</b>: Starting Api
 </h4>
+
 
 1. In the Visual Studio Code integrated  terminal run the following command to start our API
 
