@@ -2174,8 +2174,7 @@ git push heroku master
 <p>In production, you will want to connect to a real data store instead of the default JSON file data store.</p>
 <p>Sails has more than 30 data stores connectors available.</p>
 <p>All of the connections are stored in config/connection.js and the default connection to use is stored in config/models.js</p>
-<h3 id="assumptions">Assumptions</h3>
-<p>It is assume that you already have a database created.  If you do not have a database, you can create a free MongoDb and Postgres on Heroku or a free MySQL database on Azure.  For this tutorial, we are going to use a free Postgresql database hosted on Heroku.</p>
+<p>For this tutorial, we are going to use a free Postgresql database hosted on Heroku.</p>
 <h3 id="postgres">Postgres</h3>
 <h4 class="exercise-start">
     <b>Exercise</b>: Postgres
@@ -2183,6 +2182,21 @@ git push heroku master
 
 <ol>
 <li>Open integrated terminal</li>
+<li><p>Login to Heroku</p>
+<pre><code class="lang-bash"> heroku login
+</code></pre>
+</li>
+<li><p>To add a free Postgresql database to our Heroku App run the following command.  The command will associate the database with the app sails-ws and name the add-on sails-ws-pg</p>
+<pre><code class="lang-bash"> heroku addons:create heroku-postgresql:hobby-dev --app sails-ws --name sails-ws-pg --wait
+</code></pre>
+</li>
+<li><p>Get the database url from Heroku by running</p>
+<pre><code class="lang-bash"> heroku config -s
+</code></pre>
+</li>
+</ol>
+<p>Now we need to install the Sails Postgres connector</p>
+<ol>
 <li><p>Run the following npm install command</p>
 <pre><code class="lang-bash"> npm install sails-postgresql --save
 </code></pre>
@@ -2194,17 +2208,54 @@ git push heroku master
 <li><p>Find the Postgres section</p>
 </li>
 <li>Uncomment the somePostgresqlServer connection </li>
-<li>Change the name from somePostgresqlServer to sails-ws-pg</li>
+<li>Change the name from somePostgresqlServer to sailsTutorialPostgres</li>
 <li>Remove the host, user, password, and database for your Postgres database configuration</li>
-<li><p>Add url set to process.env.DATABASE_url and ssl = true to the configuration</p>
+<li><p>Add url set the value to the output of the <code>heroku config -s</code> command and set ssl to true </p>
 <pre><code class="lang-javascript"> sailsTutorialPostgres: {
      adapter: &#39;sails-postgresql&#39;,
-     url: process.env.DATABASE_URL,
+     url: herokuConfigOutputForDatabaseUrl,
      ssl: true
  }
 </code></pre>
 </li>
-<li>Save the file</li>
+<li><p>Open the config/models.js</p>
+<pre><code class="lang-bash"> models.js
+</code></pre>
+</li>
+<li><p>Uncomment the connection on line 20 </p>
+</li>
+<li><p>Make sure that line 20 is set to <code>sailsTutorialPostgres</code></p>
+<pre><code class="lang-javascript"> sailsTutorialPostgres
+</code></pre>
+</li>
+<li><p>Save the file</p>
+</li>
+<li><p>Restart sails lift and it will connect to your data store.  The first time will be slower as it migrates your models (e.g. creates tables and columns)</p>
+</li>
+</ol>
+<div class="alert alert-warning" role="alert"><strong>Warning</strong>: If you connect to your data store for the first time with the NODE_ENV set to production or run sails lift with the --prod flag, the migrate configuration will automatically be set to safe and your models will not be created in the data store.  To workaround this, you can connect to your data store from your local machine to get the models migrated.  Just becareful doing this since it could potentially impact data and/or performance during the migrate operation.  </div>
+
+<ol>
+<li>Once <code>sails lift</code> start, you can stop it since we won&#39;t be using it.</li>
+</ol>
+<p>Now that we have our models in our Postgres data store, we need to configure it to use an environment variable to get the connection string.</p>
+<ol>
+<li><p>In the models.js file, change the connection to localDiskDb</p>
+<pre><code class="lang-bash"> localDiskDb
+</code></pre>
+</li>
+<li><p>Save the model.js file</p>
+</li>
+<li><p>Open the config/connections.js file</p>
+<pre><code class="lang-bash"> connections.js
+</code></pre>
+</li>
+<li><p>Find the Postgres section and change the url to process.env.DATABASE_url </p>
+<pre><code class="lang-javascript"> url: process.env.DATABASE_URL,
+</code></pre>
+</li>
+<li><p>Save the file</p>
+</li>
 </ol>
 <div class="exercise-end"></div>
 
@@ -2219,27 +2270,15 @@ git push heroku master
     <b>Exercise</b>: Configure Model Connection
 </h4>
 
-<ol>
-<li><p>Open config\models.js</p>
-<pre><code class="lang-bash"> models.js
-</code></pre>
-</li>
-<li><p>Uncomment the connection on line 20 </p>
-</li>
-<li><p>Make sure that line 20 is set to <code>localDiskDb</code></p>
-<pre><code class="lang-javascript"> localDiskDb
-</code></pre>
-</li>
-<li><p>Save the file</p>
-</li>
-</ol>
-<p>Next we want to set the development and production environment variables so that we can use the localDiskDb in development and Postgresql in production.</p>
-<p>We have 2 environment files:</p>
+<p>We want to set the production environment variables to make it use the Postgresql connection in production.</p>
+<p>We have 2 environment files that allow us to have different settings between development and production:</p>
 <ol>
 <li>config\env\development.js -&gt; used for development when NODE_ENV is not set to production</li>
 <li><p>config\env\production.js -&gt; used for when NODE_ENV is set to production</p>
 </li>
 <li><p>Open config\env\production.js</p>
+<pre><code class="lang-bash"> production.js
+</code></pre>
 </li>
 <li><p>Configure the models to use the sailsTutorialPostgres connection that we just configured</p>
 <pre><code class="lang-javascript"> models: {
@@ -2247,11 +2286,9 @@ git push heroku master
  },
 </code></pre>
 </li>
-<li><p>Restart sails lift and it will connect to your data store.  The first time will be slower as it migrates your models (e.g. creates tables and columns)</p>
+<li><p>Save the file</p>
 </li>
 </ol>
-<div class="alert alert-warning" role="alert"><strong>Warning</strong>: If you connect to your data store for the first time with the NODE_ENV set to production or run sails lift with the --prod flag, the migrate configuration will automatically be set to safe and your models will not be created in the data store.  To workaround this, you can connect to your data store from your local machine to get the models migrated.  Just becareful doing this since it could potentially impact data and/or performance during the migrate operation</div>
-
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
@@ -2281,8 +2318,9 @@ git push heroku master
 </li>
 </ol>
 <div class="exercise-end"></div>
+
 				</div>
-				<hr>
+				<!--<hr>
 				<div class="chapter">
 					<h2 id="hooking-up-a-ui">Hooking Up a UI</h2>
 <p>As part of my <a href="http://digitaldrummerj.me/angular-tutorial">Angular Workshop</a>, you build a Todo UI that utilizes the Sails Api that we just built.  The completed code for the UI is available at [<a href="https://github.com/digitaldrummerj/angular-tutorial-code">https://github.com/digitaldrummerj/angular-tutorial-code</a>].</p>
@@ -2338,7 +2376,7 @@ git push heroku master
 <li>On the home page, you can add new Todo items, completed an item or delete an item.</li>
 </ol>
 
-				</div>
+				</div>-->
 				<!--<hr>
 				<div class="chapter">
 					<h2 id="unit-testing">Unit Testing</h2>
