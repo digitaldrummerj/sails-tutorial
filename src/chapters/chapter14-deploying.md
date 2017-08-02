@@ -2,7 +2,23 @@
 
 ### Preparing for Production
 
-http://sailsjs.com/documentation/concepts/deployment
+<h4 class="exercise-start">
+    <b>Exercise</b>: Set Port 
+</h4>
+
+1. Open config/env/production.js 
+
+    ```bash
+    production.js
+    ```
+
+1. Find the commented out port number and uncomment it.  This way our API will be on port 80.
+
+1. Save the file
+
+Light Reading for Later: [http://sailsjs.com/documentation/concepts/deployment](http://sailsjs.com/documentation/concepts/deployment)
+
+<div class="exercise-end"></div>
 
 
 ### Deploy to Heroku
@@ -78,7 +94,9 @@ Prerequisites:
 
 1. It will take a bit to deploy and install the dependencies on Heroku. 
 
-Anytime you need to redeploy the app run
+<div class="alert alert-danger" role="alert">**Note:** The Api will not work yet since the file based JSON file does not work on Heroku.  Instead we need to connect to an actual data store which we will do in the next chapter</div>
+
+Anytime you need to redeploy the app on Heroku run the following commands:
 
 ```bash
 git add .
@@ -90,6 +108,7 @@ git push heroku master
 
 ### Deploy to Azure
 
-Microsoft has a great article on their Docs site at [https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails]
+For this tutorial, we will not be using Azure but if you need to deploy to Azure, Microsoft has a great article on their Docs site at [https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails]
 (https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails)
+
 

@@ -24,7 +24,7 @@ To override the built-in get, post, put, and delete, we will be creating methods
 | GET | find | Get all records |
 | GET/:id | findOne | Get record by ID |
 | PUT  | update  | Update record |
-| DELETE |  destroy | Remove record | 
+| DELETE |  delete | Remove record | 
 
 ### Function Format
 

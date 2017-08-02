@@ -658,7 +658,7 @@ Be able to query to the current logged in user</li>
 </tr>
 <tr>
 <td>DELETE</td>
-<td>destroy</td>
+<td>delete</td>
 <td>Remove record</td>
 </tr>
 </tbody>
@@ -1985,78 +1985,6 @@ var user = {
 				</div>
 				<hr>
 				<div class="chapter">
-					<h2 id="deploying">Deploying</h2>
-<h3 id="preparing-for-production">Preparing for Production</h3>
-<p><a href="http://sailsjs.com/documentation/concepts/deployment">http://sailsjs.com/documentation/concepts/deployment</a></p>
-<h3 id="deploy-to-heroku">Deploy to Heroku</h3>
-<p>Prerequisites:</p>
-<ul>
-<li><a href="http://git-scm.com/">Git</a></li>
-<li><a href="https://signup.heroku.com/login">Heroku account</a></li>
-<li><a href="https://toolbelt.heroku.com/">Heroku Toolbelt installed</a> (CLI tool for creating and managing Heroku apps)</li>
-</ul>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Create Heroku App
-</h4>
-
-<ol>
-<li>Stop sails lift</li>
-<li>Open a command prompt or Windows terminal outside of Visual Studio Code</li>
-<li>Navigate to our Sails app</li>
-<li><p>Login to your Heroku account</p>
-<pre><code class="lang-bash"> heroku login
-</code></pre>
-<p> <div class="alert alert-warning">If heroku can&#39;t be found, you will need to hit the trash in the upper right of your integrated shell and then open the integrated terminal up again<div></p>
-</li>
-<li><p>Create a new heroku app</p>
-<pre><code class="lang-bash"> heroku create your-app-name
-</code></pre>
-</li>
-<li><p>Next we need to create a ProcFile in the root of our project to tell Heroku how to run our Sails app</p>
-<pre><code class="lang-bash"> Procfile
-</code></pre>
-</li>
-<li><p>In the Procfile, add the following line</p>
-<pre><code class="lang-bash"> web: node app.js
-</code></pre>
-</li>
-<li><p>We need create a Git repository for our Sails ap</p>
-<pre><code class="lang-bash"> git init
-</code></pre>
-</li>
-<li><p>We are going to use Git on Heroku to do a deploy to Heroku</p>
-<pre><code class="lang-bash"> heroku git:remote -a your-app-name
-</code></pre>
-</li>
-<li><p>Add the Procfile to Git</p>
-<pre><code class="lang-bash"> git add .
-</code></pre>
-</li>
-<li><p>Now we need to commit the Procfile</p>
-<pre><code class="lang-bash"> git commit -m &quot;initial commit with Procfile&quot;
-</code></pre>
-</li>
-<li><p>We need to push to heroku</p>
-<pre><code class="lang-bash"> git push heroku master
-</code></pre>
-</li>
-<li><p>It will take a bit to deploy and install the dependencies on Heroku. </p>
-</li>
-</ol>
-<p>Anytime you need to redeploy the app run</p>
-<pre><code class="lang-bash">git add .
-git commit -m &quot;new changes&quot;
-git push heroku master
-</code></pre>
-<div class="exercise-end"></div>
-
-<h3 id="deploy-to-azure">Deploy to Azure</h3>
-<p>Microsoft has a great article on their Docs site at [<a href="https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails">https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails</a>]
-(<a href="https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails">https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails</a>)</p>
-
-				</div>
-				<hr>
-				<div class="chapter">
 					<h2 id="cors-configuration">CORS Configuration</h2>
 <p>Before we can use our API against a UI or allow others to call the API we need to configure CORS.</p>
 <p>CORS allows us to configure which routes, domains, if cookies are passed in, which REST verbs are allowed, and what header values are allowed.  </p>
@@ -2170,14 +2098,104 @@ git push heroku master
 				</div>
 				<hr>
 				<div class="chapter">
+					<h2 id="deploying">Deploying</h2>
+<h3 id="preparing-for-production">Preparing for Production</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Set Port 
+</h4>
+
+<ol>
+<li><p>Open config/env/production.js </p>
+<pre><code class="lang-bash"> production.js
+</code></pre>
+</li>
+<li><p>Find the commented out port number and uncomment it.  This way our API will be on port 80.</p>
+</li>
+<li><p>Save the file</p>
+</li>
+</ol>
+<p>Light Reading for Later: <a href="http://sailsjs.com/documentation/concepts/deployment">http://sailsjs.com/documentation/concepts/deployment</a></p>
+<div class="exercise-end"></div>
+
+
+<h3 id="deploy-to-heroku">Deploy to Heroku</h3>
+<p>Prerequisites:</p>
+<ul>
+<li><a href="http://git-scm.com/">Git</a></li>
+<li><a href="https://signup.heroku.com/login">Heroku account</a></li>
+<li><a href="https://toolbelt.heroku.com/">Heroku Toolbelt installed</a> (CLI tool for creating and managing Heroku apps)</li>
+</ul>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create Heroku App
+</h4>
+
+<ol>
+<li>Stop sails lift</li>
+<li>Open a command prompt or Windows terminal outside of Visual Studio Code</li>
+<li>Navigate to our Sails app</li>
+<li><p>Login to your Heroku account</p>
+<pre><code class="lang-bash"> heroku login
+</code></pre>
+<p> <div class="alert alert-warning">If heroku can&#39;t be found, you will need to hit the trash in the upper right of your integrated shell and then open the integrated terminal up again<div></p>
+</li>
+<li><p>Create a new heroku app</p>
+<pre><code class="lang-bash"> heroku create your-app-name
+</code></pre>
+</li>
+<li><p>Next we need to create a ProcFile in the root of our project to tell Heroku how to run our Sails app</p>
+<pre><code class="lang-bash"> Procfile
+</code></pre>
+</li>
+<li><p>In the Procfile, add the following line</p>
+<pre><code class="lang-bash"> web: node app.js
+</code></pre>
+</li>
+<li><p>We need create a Git repository for our Sails ap</p>
+<pre><code class="lang-bash"> git init
+</code></pre>
+</li>
+<li><p>We are going to use Git on Heroku to do a deploy to Heroku</p>
+<pre><code class="lang-bash"> heroku git:remote -a your-app-name
+</code></pre>
+</li>
+<li><p>Add the Procfile to Git</p>
+<pre><code class="lang-bash"> git add .
+</code></pre>
+</li>
+<li><p>Now we need to commit the Procfile</p>
+<pre><code class="lang-bash"> git commit -m &quot;initial commit with Procfile&quot;
+</code></pre>
+</li>
+<li><p>We need to push to heroku</p>
+<pre><code class="lang-bash"> git push heroku master
+</code></pre>
+</li>
+<li><p>It will take a bit to deploy and install the dependencies on Heroku. </p>
+</li>
+</ol>
+<div class="alert alert-danger" role="alert"><strong>Note:</strong> The Api will not work yet since the file based JSON file does not work on Heroku.  Instead we need to connect to an actual data store which we will do in the next chapter</div>
+
+<p>Anytime you need to redeploy the app on Heroku run the following commands:</p>
+<pre><code class="lang-bash">git add .
+git commit -m &quot;new changes&quot;
+git push heroku master
+</code></pre>
+<div class="exercise-end"></div>
+
+<h3 id="deploy-to-azure">Deploy to Azure</h3>
+<p>For this tutorial, we will not be using Azure but if you need to deploy to Azure, Microsoft has a great article on their Docs site at [<a href="https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails">https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails</a>]
+(<a href="https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails">https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-nodejs-sails</a>)</p>
+
+				</div>
+				<hr>
+				<div class="chapter">
 					<h2 id="connecting-to-a-data-store">Connecting to A Data Store</h2>
-<p>In production, you will want to connect to a real data store instead of the default JSON file data store.</p>
 <p>Sails has more than 30 data stores connectors available.</p>
 <p>All of the connections are stored in config/connection.js and the default connection to use is stored in config/models.js</p>
 <p>For this tutorial, we are going to use a free Postgresql database hosted on Heroku.</p>
-<h3 id="postgres">Postgres</h3>
+<h3 id="provision-postgresql-database">Provision Postgresql Database</h3>
 <h4 class="exercise-start">
-    <b>Exercise</b>: Postgres
+    <b>Exercise</b>: Provision Postgresql Database
 </h4>
 
 <ol>
@@ -2186,7 +2204,7 @@ git push heroku master
 <pre><code class="lang-bash"> heroku login
 </code></pre>
 </li>
-<li><p>To add a free Postgresql database to our Heroku App run the following command.  The command will associate the database with the app sails-ws and name the add-on sails-ws-pg</p>
+<li><p>To add a free Postgresql database to our Heroku App run the following command.  The command will create and associate the database with the app sails-ws and name the add-on sails-ws-pg</p>
 <pre><code class="lang-bash"> heroku addons:create heroku-postgresql:hobby-dev --app sails-ws --name sails-ws-pg --wait
 </code></pre>
 </li>
@@ -2195,12 +2213,27 @@ git push heroku master
 </code></pre>
 </li>
 </ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Install Connector
+</h4>
+
 <p>Now we need to install the Sails Postgres connector</p>
 <ol>
-<li><p>Run the following npm install command</p>
+<li><p>In the integrated termainal, run the following npm install command</p>
 <pre><code class="lang-bash"> npm install sails-postgresql --save
 </code></pre>
 </li>
+</ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Set Connection 
+</h4>
+
+<p>Next we need to configure the connection</p>
+<ol>
 <li><p>Open config\connections.js</p>
 <pre><code class="lang-bash"> connections.js
 </code></pre>
@@ -2210,7 +2243,7 @@ git push heroku master
 <li>Uncomment the somePostgresqlServer connection </li>
 <li>Change the name from somePostgresqlServer to sailsTutorialPostgres</li>
 <li>Remove the host, user, password, and database for your Postgres database configuration</li>
-<li><p>Add url set the value to the output of the <code>heroku config -s</code> command and set ssl to true </p>
+<li><p>Add url parameter and set the value to the output of the <code>heroku config -s</code> command and set ssl to true </p>
 <pre><code class="lang-javascript"> sailsTutorialPostgres: {
      adapter: &#39;sails-postgresql&#39;,
      url: herokuConfigOutputForDatabaseUrl,
@@ -2218,6 +2251,9 @@ git push heroku master
  }
 </code></pre>
 </li>
+</ol>
+<p>Finally, we need to tell the model what the default data store to use it</p>
+<ol>
 <li><p>Open the config/models.js</p>
 <pre><code class="lang-bash"> models.js
 </code></pre>
@@ -2233,14 +2269,16 @@ git push heroku master
 <li><p>Restart sails lift and it will connect to your data store.  The first time will be slower as it migrates your models (e.g. creates tables and columns)</p>
 </li>
 </ol>
-<div class="alert alert-warning" role="alert"><strong>Warning</strong>: If you connect to your data store for the first time with the NODE_ENV set to production or run sails lift with the --prod flag, the migrate configuration will automatically be set to safe and your models will not be created in the data store.  To workaround this, you can connect to your data store from your local machine to get the models migrated.  Just becareful doing this since it could potentially impact data and/or performance during the migrate operation.  </div>
+<div class="alert alert-warning" role="alert"><strong>Warning</strong>: If you connect to your data store with the NODE_ENV set to production or run sails lift with the --prod flag, the migrate configuration will automatically be set to safe and your models will not be created/updated in the data store.  To workaround this, connect to your data store from your local machine to get the models migrated.  Just be aware that doing this could potentially impact data and/or performance during the migrate operation.</div>
 
 <ol>
 <li>Once <code>sails lift</code> start, you can stop it since we won&#39;t be using it.</li>
 </ol>
-<p>Now that we have our models in our Postgres data store, we need to configure it to use an environment variable to get the connection string.</p>
+<p>Now that we have our models in our Postgres data store, we need to change the configuration so that in development we use the JSON file and in production we will use Postgres and get the connection string from an environment variable.</p>
+<div class="alert alert-danger" role="alert">Make sure to not check in your database connection info to Git</div>
+
 <ol>
-<li><p>In the models.js file, change the connection to localDiskDb</p>
+<li><p>In the models.js file, change the connection back to localDiskDb</p>
 <pre><code class="lang-bash"> localDiskDb
 </code></pre>
 </li>
@@ -2250,7 +2288,7 @@ git push heroku master
 <pre><code class="lang-bash"> connections.js
 </code></pre>
 </li>
-<li><p>Find the Postgres section and change the url to process.env.DATABASE_url </p>
+<li><p>Find the Postgres section and change the url to process.env.DATABASE_url .  Heroku automatically created this environment variable for you when you created the database.  </p>
 <pre><code class="lang-javascript"> url: process.env.DATABASE_URL,
 </code></pre>
 </li>
@@ -2260,22 +2298,18 @@ git push heroku master
 <div class="exercise-end"></div>
 
 <h3 id="configure-models-to-use-connection">Configure Models to Use Connection</h3>
-<p>You have 2 options for configuring the data store connection that models use:</p>
+<p>We want to set the production environment variables to make it use the Postgresql connection in production.</p>
+<p>We have 2 environment files that allow us to have different settings between development and production:</p>
 <ol>
-<li>Global configuration in config\models.js</li>
-<li>Configuration in each model</li>
+<li><strong>config\env\development.js</strong>: used for development and when NODE_ENV is not set to production</li>
+<li><strong>config\env\production.js</strong>: used for when NODE_ENV is set to production</li>
 </ol>
-<p>Since we are only using 1 data store for this tutorial, we are going to go with option 1 and create a global configuration.</p>
+<p>For this tutorial, we are only going to be changing production.</p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Configure Model Connection
 </h4>
 
-<p>We want to set the production environment variables to make it use the Postgresql connection in production.</p>
-<p>We have 2 environment files that allow us to have different settings between development and production:</p>
 <ol>
-<li>config\env\development.js -&gt; used for development when NODE_ENV is not set to production</li>
-<li><p>config\env\production.js -&gt; used for when NODE_ENV is set to production</p>
-</li>
 <li><p>Open config\env\production.js</p>
 <pre><code class="lang-bash"> production.js
 </code></pre>
@@ -2291,6 +2325,7 @@ git push heroku master
 </ol>
 <div class="exercise-end"></div>
 
+<h3 id="deploy-change-to-heroku">Deploy Change to Heroku</h3>
 <h4 class="exercise-start">
     <b>Exercise</b>: Deploy Changes to Heroku
 </h4>
@@ -2312,7 +2347,7 @@ git push heroku master
 </li>
 <li><p>You can now access the API at <a href="https://sails-ws.herokuapp.com/">https://sails-ws.herokuapp.com/</a></p>
 <ul>
-<li>The first thing you will want to do is run a post against <a href="https://sails-ws.herokuapp.com/user">https://sails-ws.herokuapp.com/user</a> to create our new user.  </li>
+<li>The first thing you will want to do is run a post against <a href="https://sails-ws.herokuapp.com/user">https://sails-ws.herokuapp.com/user</a> to create a user.  </li>
 <li>Then you can make calls against the User and Todo Api</li>
 </ul>
 </li>
