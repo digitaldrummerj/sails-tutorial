@@ -2033,14 +2033,14 @@ var user = {
 </code></pre>
 </li>
 <li><p>Now we need to commit the Procfile</p>
-<pre><code class="lang-bash"> git commit -m &quot;Add Procfile&quot;
+<pre><code class="lang-bash"> git commit -m &quot;initial commit with Procfile&quot;
 </code></pre>
 </li>
 <li><p>We need to push to heroku</p>
 <pre><code class="lang-bash"> git push heroku master
 </code></pre>
 </li>
-<li><p>It will take a bit to deploy and install the dependencies on Heroku.  Once the deploy is completed, you will be able to view your application at <a href="https://your-app-name-heroku.herokuapp.com">https://your-app-name-heroku.herokuapp.com</a></p>
+<li><p>It will take a bit to deploy and install the dependencies on Heroku. </p>
 </li>
 </ol>
 <p>Anytime you need to redeploy the app run</p>
@@ -2175,57 +2175,7 @@ git push heroku master
 <p>Sails has more than 30 data stores connectors available.</p>
 <p>All of the connections are stored in config/connection.js and the default connection to use is stored in config/models.js</p>
 <h3 id="assumptions">Assumptions</h3>
-<p>It is assume that you already have a database created.  If you do not have a database, you can create a free MongoDb and Postgres on Heroku or a free MySQL database on Azure.</p>
-<h3 id="mongo">Mongo</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Mongo Db
-</h4>
-
-<ol>
-<li>Open integrated terminal</li>
-<li><p>Run the following npm install command</p>
-<pre><code class="lang-bash"> npm install sails-mongo --save
-</code></pre>
-</li>
-<li><p>Open config\connections.js</p>
-<pre><code class="lang-bash"> connections.js
-</code></pre>
-</li>
-<li><p>Find the mongo db section</p>
-</li>
-<li>Uncomment the someMongodbServer connection </li>
-<li>Change the name from someMongodbServer to something more useful to you</li>
-<li>Update the host, port, user, password, and database for your Mongo database</li>
-<li>Save the file</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h3 id="mysql">MySQL</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: MySQL
-</h4>
-
-<ol>
-<li>Open integrated terminal</li>
-<li><p>Run the following npm install command</p>
-<pre><code class="lang-bash"> npm install sails-mysql --save
-</code></pre>
-</li>
-</ol>
-<ol>
-<li><p>Open config\connections.js</p>
-<pre><code class="lang-bash"> connections.js
-</code></pre>
-</li>
-<li><p>Find the MySQL section</p>
-</li>
-<li>Uncomment the someMysqlServer connection </li>
-<li>Change the name from someMysqlServer to something more useful to you</li>
-<li>Update the host, user, password, and database for your MySQL database</li>
-<li>Save the file</li>
-</ol>
-<div class="exercise-end"></div>
-
+<p>It is assume that you already have a database created.  If you do not have a database, you can create a free MongoDb and Postgres on Heroku or a free MySQL database on Azure.  For this tutorial, we are going to use a free Postgresql database hosted on Heroku.</p>
 <h3 id="postgres">Postgres</h3>
 <h4 class="exercise-start">
     <b>Exercise</b>: Postgres
@@ -2244,8 +2194,16 @@ git push heroku master
 <li><p>Find the Postgres section</p>
 </li>
 <li>Uncomment the somePostgresqlServer connection </li>
-<li>Change the name from somePostgresqlServer to something more useful to you</li>
-<li>Update the host, user, password, and database for your Postgres database</li>
+<li>Change the name from somePostgresqlServer to sails-ws-pg</li>
+<li>Remove the host, user, password, and database for your Postgres database configuration</li>
+<li><p>Add url set to process.env.DATABASE_url and ssl = true to the configuration</p>
+<pre><code class="lang-javascript"> sailsTutorialPostgres: {
+     adapter: &#39;sails-postgresql&#39;,
+     url: process.env.DATABASE_URL,
+     ssl: true
+ }
+</code></pre>
+</li>
 <li>Save the file</li>
 </ol>
 <div class="exercise-end"></div>
@@ -2268,12 +2226,60 @@ git push heroku master
 </li>
 <li><p>Uncomment the connection on line 20 </p>
 </li>
-<li>Change the value of the connection to the name of the connection that you want to use from the connections.js file</li>
-<li>Save the file</li>
-<li>Restart sails lift and it will connect to your data store.  The first time will be slower as it migrates your models (e.g. creates tables and columns)</li>
+<li><p>Make sure that line 20 is set to <code>localDiskDb</code></p>
+<pre><code class="lang-javascript"> localDiskDb
+</code></pre>
+</li>
+<li><p>Save the file</p>
+</li>
+</ol>
+<p>Next we want to set the development and production environment variables so that we can use the localDiskDb in development and Postgresql in production.</p>
+<p>We have 2 environment files:</p>
+<ol>
+<li>config\env\development.js -&gt; used for development when NODE_ENV is not set to production</li>
+<li><p>config\env\production.js -&gt; used for when NODE_ENV is set to production</p>
+</li>
+<li><p>Open config\env\production.js</p>
+</li>
+<li><p>Configure the models to use the sailsTutorialPostgres connection that we just configured</p>
+<pre><code class="lang-javascript"> models: {
+     connection: &#39;sailsTutorialPostgres&#39;
+ },
+</code></pre>
+</li>
+<li><p>Restart sails lift and it will connect to your data store.  The first time will be slower as it migrates your models (e.g. creates tables and columns)</p>
+</li>
 </ol>
 <div class="alert alert-warning" role="alert"><strong>Warning</strong>: If you connect to your data store for the first time with the NODE_ENV set to production or run sails lift with the --prod flag, the migrate configuration will automatically be set to safe and your models will not be created in the data store.  To workaround this, you can connect to your data store from your local machine to get the models migrated.  Just becareful doing this since it could potentially impact data and/or performance during the migrate operation</div>
 
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Deploy Changes to Heroku
+</h4>
+
+<p>We are now ready to deploy our updates to Heroku.</p>
+<ol>
+<li>Open the integrated terminal</li>
+<li><p>Add our changes to git</p>
+<pre><code class="lang-bash"> git add .
+</code></pre>
+</li>
+<li><p>Commit our changes</p>
+<pre><code class="lang-bash"> git commit -m &quot;configured postgres&quot;
+</code></pre>
+</li>
+<li><p>Push our changes to Heroku</p>
+<pre><code class="lang-bash"> git push heroku master
+</code></pre>
+</li>
+<li><p>You can now access the API at <a href="https://sails-ws.herokuapp.com/">https://sails-ws.herokuapp.com/</a></p>
+<ul>
+<li>The first thing you will want to do is run a post against <a href="https://sails-ws.herokuapp.com/user">https://sails-ws.herokuapp.com/user</a> to create our new user.  </li>
+<li>Then you can make calls against the User and Todo Api</li>
+</ul>
+</li>
+</ol>
 <div class="exercise-end"></div>
 				</div>
 				<hr>

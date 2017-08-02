@@ -67,7 +67,7 @@ Prerequisites:
 1. Now we need to commit the Procfile
 
     ```bash
-    git commit -m "Add Procfile"
+    git commit -m "initial commit with Procfile"
     ```
 
 1. We need to push to heroku
@@ -76,7 +76,7 @@ Prerequisites:
     git push heroku master
     ```
 
-1. It will take a bit to deploy and install the dependencies on Heroku.  Once the deploy is completed, you will be able to view your application at [https://your-app-name-heroku.herokuapp.com](https://your-app-name-heroku.herokuapp.com)
+1. It will take a bit to deploy and install the dependencies on Heroku. 
 
 Anytime you need to redeploy the app run
 

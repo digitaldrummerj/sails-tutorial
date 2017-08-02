@@ -6,7 +6,6 @@ CORS allows us to configure which routes, domains, if cookies are passed in, whi
 
 Without configuring, no one would be able to make calls to our API.
 
-
 ### CORS Routes
 
 <h4 class="exercise-start">
